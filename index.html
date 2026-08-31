@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Total-Teka</title>
+  <meta charset="UTF-8">
+  <meta name="author" content="Pumapro">
+  <meta name="keywords" content="Películas, series, comics, mangas, libros, música">
+  <meta name="description" content="Toda la información sobre todos los temas posibles del mundo en la biblioteca mas grande del mundo.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* Estilos generales con el fondo oscuro de Yupmanga */
+    *{ margin: 0; padding: 0; box-sizing: border-box; }
+    body{ background: rgb(9, 9, 11); color: white; font-family: sans-serif; }
+    .titulo{ width: 100%; }
+    nav{ text-align: center; padding: 10px; }
+    
+    /* Estilos del Carrusel */
+    .carousel-container { width: 100%; overflow: hidden; padding: 15px 0; background: rgb(9, 9, 11); }
+    .carousel-track { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .btn-category { background: #2a2a2a; color: white; border: 1px solid #444; padding: 8px 16px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+    .btn-category.active { background: #007bff; border-color: #007bff; }
+
+    /* ==========================================================================
+       AJUSTE DE ANCHO: Cambiamos de 110px a 115px para ensanchar las tarjetas
+       ========================================================================== */
+    #cards { 
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+      gap: 12px; 
+      padding: 12px;
+      background-color: rgb(9, 9, 11); 
+    }
+    
+    /* Mensaje de carga */
+    .texto-carga {
+      grid-column: 1 / -1; 
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      line-height: 1.5;
+      padding: 40px 10px;
+      color: #ffffff;
+    }
+    
+    /* ==========================================================================
+       AJUSTE DE ALTO: Subimos a 152% para alargarlas proporcionalmente
+       ========================================================================== */
+    .tarjeta-item { 
+      position: relative;
+      width: 100%;
+      padding-top: 152%; 
+      background-color: rgb(24, 24, 27); 
+      overflow: hidden;
+      display: block;
+      text-decoration: none;
+      border-radius: 0px !important; /* Esquinas 100% rectas estilo YupManga */
+    }
+
+    /* Imagen absoluta de fondo */
+    .tarjeta-item img { 
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; 
+      border-radius: 0px !important;
+      transition: transform 0.3s ease;
+      z-index: 1;
+    }
+
+    .tarjeta-item:active img {
+      transform: scale(1.05); 
+    }
+
+    /* CONTENEDOR DE INFORMACIÓN */
+    .tarjeta-info { 
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* Padding inferior ajustado al mínimo (4px) para clavar el año abajo del todo */
+      padding: 12px 8px 4px 8px; 
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end; 
+      gap: 1px; /* Espaciado mínimo para que queden juntos pero independientes */
+    }    
+
+    /* Título del contenido (Alineado a la izquierda) */
+    .tarjeta-titulo { 
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.2;
+      text-align: left; 
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* Máximo 2 líneas */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis; 
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+    }    
+
+    /* ==========================================================================
+       EL AÑO: Ubicado exactamente en el mismo lugar que los números de YupManga
+       ========================================================================== */
+    .tarjeta-ano {
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.85); 
+      text-align: left; 
+      font-weight: 600;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+    }
+    
+    /* Paginación y Footer */
+    #paginacion { display: flex; gap: 10px; justify-content: center; margin: 20px 0; align-items: center; }
+    #paginacion button { padding: 8px 12px; border: none; border-radius: 4px; background: #27272a; color: white; cursor: pointer; font-weight: bold; }
+    #paginacion button.activo { background: #007bff; }
+    #paginacion span { color: white; font-weight: bold; }
+    footer{ text-align: center; padding: 20px; font-size: 0.8rem; border-top: 1px solid #27272a; color: #71717a; }
+  </style>
+</head>
+<body>
+  <img class="titulo" src="https://opkserkawziqdsvkyhky.supabase.co/storage/v1/object/public/imagenes/titulo.png">
+  
+  <div class="carousel-container">
+    <div class="carousel-track" id="categoryTrack">
+      <button class="btn-category active" data-tipo="Todos">Todos</button>
+      <button class="btn-category" data-tipo="Comic">Cómic</button>
+      <button class="btn-category" data-tipo="Manga">Manga</button>
+      <button class="btn-category" data-tipo="Novela">Novela</button>
+      <button class="btn-category" data-tipo="Pelicula">Película</button>
+      <button class="btn-category" data-tipo="Serie">Serie</button>
+      <button class="btn-category" data-tipo="Videojuego">Videojuego</button>
+    </div>
+  </div>
+  
+  <nav>
+    <select id="filtroTipo" onchange="actualizarCarruselYFiltros()">
+      <option value="Todos">Todos</option>
+      <option value="Comic">Cómic</option>
+      <option value="Manga">Manga</option>
+      <option value="Novela">Novela</option>
+      <option value="Pelicula">Película</option>
+      <option value="Serie">Serie</option>
+      <option value="Videojuego">Videojuego</option>
+    </select>
+    <select id="ordenar" onchange="aplicarFiltros()">
+      <option value="abc">Nombre (A-Z)</option>
+      <option value="cba">Nombre (Z-A)</option>
+      <option value="año-asc">Año (0-9)</option>
+      <option value="año-desc">Año (9-0)</option>
+    </select>
+    <select id="filtroPais" onchange="aplicarFiltros()">
+      <option value="">Todos los Países</option>
+      <option value="Francia">Francia</option>
+      <option value="Japón">Japón</option>
+    </select>
+    <select id="filtroAutor" onchange="aplicarFiltros()">
+      <option value="">Todos los Autores</option>
+      <option value="Masashi Kishimoto">Masashi Kishimoto</option>
+      <option value="Pierre Boulle">Pierre Boulle</option>
+    </select>
+    <select id="filtroEditor" onchange="aplicarFiltros()">
+      <option value="">Todos los Editores</option>
+      <option value="Éditions Julliard">Éditions Julliard</option>
+      <option value="Shueisha">Shueisha</option>
+    </select>
+  </nav>
+
+  <div id="cards">
+    <div class="texto-carga">Cargando Biblioteca desde<br>la nube...</div>
+  </div>
+  
+  <div id="paginacion"></div>
+
+  <footer>
+    <p>Biblioteca de Pumapro y Paloma</p>
+    <p>Todos los derechos reservados</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const supabaseUrl = 'https://opkserkawziqdsvkyhky.supabase.co';
+    const supabaseKey = 'sb_publishable_U6Ljq3yho2djlRpkhcn9Cg_febIPxRj';
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    let datos = [];
+    let datosFiltrados = [];
+    let paginaActual = 1;
+    const itemsPorPagina = 24;
+
+    const btnCategories = document.querySelectorAll('.btn-category');
+    btnCategories.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btnCategories.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('filtroTipo').value = btn.getAttribute('data-tipo');
+        aplicarFiltros();
+      });
+    });
+
+    function actualizarCarruselYFiltros() {
+      const valor = document.getElementById('filtroTipo').value;
+      btnCategories.forEach(b => {
+        if(b.getAttribute('data-tipo') === valor) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+      aplicarFiltros();
+    }
+
+    async function cargarDesdeSupabase() {
+      const { data, error } = await _supabase.from('Biblioteca').select('*');
+      if (error) {
+        document.getElementById("cards").innerHTML = `<div class="texto-carga">Error:<br>${error.message}</div>`;
+      } else {
+        datos = data || [];
+        aplicarFiltros();
+      }
+    }
+
+    function aplicarFiltros() {
+      const tipoSel = document.getElementById('filtroTipo').value;
+      const paisSel = document.getElementById('filtroPais').value;
+      const autorSel = document.getElementById('filtroAutor').value;
+      const editorSel = document.getElementById('filtroEditor').value;
+      const ordenSel = document.getElementById('ordenar').value;
+
+      datosFiltrados = datos.filter(item => {
+        return (tipoSel === 'Todos' || item.tipo === tipoSel) &&
+               (paisSel === '' || item.pais === paisSel) &&
+               (autorSel === '' || item.autor === autorSel) &&
+               (editorSel === '' || item.editor === editorSel);
+      });
+
+      datosFiltrados.sort((a, b) => {
+        const nombreA = (a.nombre || "").toLowerCase();
+        const nombreB = (b.nombre || "").toLowerCase();
+        if (ordenSel === 'abc') return nombreA.localeCompare(nombreB);
+        if (ordenSel === 'cba') return nombreB.localeCompare(nombreA);
+        if (ordenSel === 'año-asc') return (a.año || 0) - (b.año || 0) || nombreA.localeCompare(nombreB);
+        if (ordenSel === 'año-desc') return (b.año || 0) - (a.año || 0) || nombreA.localeCompare(nombreB);
+      });
+
+      paginaActual = 1;
+      mostrardatos();
+    }
+
+    /* ==========================================================================
+       DEGRADADOS AJUSTADOS MÁS BAJOS (Comienzan sutilmente desde el 65%)
+       ========================================================================== */
+    function mostrardatos() {
+      const cardsDiv = document.getElementById("cards");
+      cardsDiv.innerHTML = "";
+      if (datosFiltrados.length === 0) {
+        cardsDiv.innerHTML = "<p style='grid-column: 1/-1; text-align: center; padding: 20px;'>No se encontraron resultados.</p>";
+        document.getElementById("paginacion").innerHTML = "";
+        return;
+      }
+
+      const inicio = (paginaActual - 1) * itemsPorPagina;
+      const paginados = datosFiltrados.slice(inicio, inicio + itemsPorPagina);
+
+      paginados.forEach(i => {
+        const añoContenido = i.año || ""; 
+        const tipoContenido = i.tipo || "Manga";
+        const urlImagen = i.portada || i.imagen || i.imagen_url || i.url || "https://via.placeholder.com/150x210";
+        const nombreTitulo = i.nombre || "Sin título";
+
+        // Ajustamos los tres puntos para que el color comience mucho más abajo (transparente hasta el 65%)
+        let degradadoInfo = "linear-gradient(to top, rgba(9, 9, 11, 0.95) 0%, rgba(9, 9, 11, 0.45) 35%, rgba(9, 9, 11, 0) 65%)";
+
+        if (tipoContenido.toLowerCase() === "manga") {
+          degradadoInfo = "linear-gradient(to top, rgba(37, 122, 248, 0.9) 0%, rgba(37, 122, 248, 0.4) 35%, rgba(37, 122, 248, 0) 65%)";
+        } else if (tipoContenido.toLowerCase() === "comic") {
+          degradadoInfo = "linear-gradient(to top, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.4) 35%, rgba(0, 123, 255, 0) 65%)";
+        } else if (tipoContenido.toLowerCase() === "libro") {
+          degradadoInfo = "linear-gradient(to top, rgba(40, 167, 69, 0.9) 0%, rgba(40, 167, 69, 0.4) 35%, rgba(40, 167, 69, 0) 65%)";
+        } else if (tipoContenido.toLowerCase() === "novela") {
+          degradadoInfo = "linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.45) 35%, rgba(255, 255, 255, 0) 65%)";
+        } else if (tipoContenido.toLowerCase() === "pelicula") {
+          degradadoInfo = "linear-gradient(to top, rgba(52, 58, 64, 0.9) 0%, rgba(52, 58, 64, 0.4) 35%, rgba(52, 58, 64, 0) 65%)";
+        } else if (tipoContenido.toLowerCase() === "serie") {
+          degradadoInfo = "linear-gradient(to top, rgba(234, 16, 20, 0.9) 0%, rgba(234, 16, 20, 0.4) 35%, rgba(234, 16, 20, 0) 65%)";
+        } else if (tipoContenido.toLowerCase() === "videojuego") {
+          degradadoInfo = "linear-gradient(to top, rgba(255, 193, 7, 0.9) 0%, rgba(255, 193, 7, 0.4) 35%, rgba(255, 193, 7, 0) 65%)";
+        }
+
+        const colorTextoEspecifico = tipoContenido.toLowerCase() === "novela" ? "color: #000000; text-shadow: none;" : "";
+
+        cardsDiv.innerHTML += `
+          <a href="#" class="tarjeta-item">
+            <img src="${urlImagen}" alt="${nombreTitulo}">
+            <div class="tarjeta-info" style="background: ${degradadoInfo};">
+                <h3 class="tarjeta-titulo" style="${colorTextoEspecifico}">${nombreTitulo}</h3>
+                <span class="tarjeta-ano" style="${colorTextoEspecifico}">${añoContenido}</span>
+            </div>
+          </a>
+        `;
+      });
+      crearPaginacion();
+    }
+
+    function crearPaginacion() {
+      const contenedorPaginacion = document.getElementById('paginacion');
+      contenedorPaginacion.innerHTML = "";
+      const totalPaginas = Math.ceil(datosFiltrados.length / itemsPorPagina);
+      
+      if (totalPaginas <= 1) return;
+
+      const rango = 2;
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        if (i === 1 || i === totalPaginas || (i >= paginaActual - rango && i <= paginaActual + rango)) {
+          const b = document.createElement('button');
+          b.innerText = i;
+          if (i === paginaActual) b.className = 'activo';
+          b.onclick = () => { 
+            paginaActual = i; 
+            mostrardatos(); 
+            window.scrollTo(0, 0); 
+          };
+          contenedorPaginacion.appendChild(b);
+        } 
+        else if (i === paginaActual - rango - 1 || i === paginaActual + rango + 1) {
+          const puntos = document.createElement('span');
+          puntos.innerText = "...";
+          contenedorPaginacion.appendChild(puntos);
+        }
+      }
+    }
+
+    cargarDesdeSupabase();
+  </script>
+</body>
+</html>
