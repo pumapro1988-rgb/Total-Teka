@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Total-Teka</title>
+  <title>Total-Teka v0.45</title>
   <meta charset="UTF-8">
   <meta name="author" content="Pumapro">
   <meta name="keywords" content="Películas, series, comics, mangas, libros, música">
@@ -41,11 +41,11 @@
       color: #ffffff;
     }
     
-    /* TARJETA INDIVIDUAL (Aspect Ratio Mantenido) */
+    /* TARJETA INDIVIDUAL */
     .tarjeta-item { 
       position: relative;
       width: 100%;
-      padding-top: 145%; /* Proporción exacta de portadas */
+      padding-top: 145%; /* Proporción de portadas */
       background-color: #18181b; 
       overflow: hidden;
       display: block;
@@ -62,6 +62,11 @@
       height: 100%;
       object-fit: cover; 
       z-index: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .tarjeta-item:active img {
+      transform: scale(1.03);
     }
 
     /* INSIGNIA SUPERIOR IZQUIERDA (AÑO / CAPÍTULO) */
@@ -87,7 +92,6 @@
       width: 100%;
       padding: 24px 6px 6px 6px; 
       z-index: 5;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0) 100%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end; 
@@ -172,7 +176,7 @@
   <div id="paginacion"></div>
 
   <footer>
-    <p>Biblioteca de Pumapro y Paloma</p>
+    <p>Biblioteca de Pumapro y Paloma (v0.45)</p>
     <p>Todos los derechos reservados</p>
   </footer>
 
@@ -244,6 +248,30 @@
       mostrardatos();
     }
 
+    /* DEGRADADOS SEGÚN EL TIPO DE CONTENIDO */
+    function obtenerDegradado(tipo) {
+      const tipoNorm = (tipo || "").toLowerCase();
+
+      switch(tipoNorm) {
+        case "manga":
+          return "linear-gradient(to top, rgba(37, 122, 248, 0.9) 0%, rgba(37, 122, 248, 0.4) 60%, rgba(37, 122, 248, 0) 100%)";
+        case "comic":
+          return "linear-gradient(to top, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.4) 60%, rgba(0, 123, 255, 0) 100%)";
+        case "libro":
+          return "linear-gradient(to top, rgba(40, 167, 69, 0.9) 0%, rgba(40, 167, 69, 0.4) 60%, rgba(40, 167, 69, 0) 100%)";
+        case "novela":
+          return "linear-gradient(to top, rgba(220, 220, 220, 0.95) 0%, rgba(220, 220, 220, 0.45) 60%, rgba(220, 220, 220, 0) 100%)";
+        case "pelicula":
+          return "linear-gradient(to top, rgba(52, 58, 64, 0.9) 0%, rgba(52, 58, 64, 0.4) 60%, rgba(52, 58, 64, 0) 100%)";
+        case "serie":
+          return "linear-gradient(to top, rgba(234, 16, 20, 0.9) 0%, rgba(234, 16, 20, 0.4) 60%, rgba(234, 16, 20, 0) 100%)";
+        case "videojuego":
+          return "linear-gradient(to top, rgba(255, 193, 7, 0.9) 0%, rgba(255, 193, 7, 0.4) 60%, rgba(255, 193, 7, 0) 100%)";
+        default:
+          return "linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0) 100%)";
+      }
+    }
+
     function mostrardatos() {
       const cardsDiv = document.getElementById("cards");
       cardsDiv.innerHTML = "";
@@ -258,15 +286,19 @@
 
       paginados.forEach(i => {
         const datoEtiqueta = i.año || i.volumen || i.numero || ""; 
+        const tipoContenido = i.tipo || "";
         const urlImagen = i.portada || i.imagen || i.imagen_url || i.url || "https://via.placeholder.com/150x210";
         const nombreTitulo = i.nombre || "Sin título";
+
+        const degradado = obtenerDegradado(tipoContenido);
+        const estiloTextoNovel = tipoContenido.toLowerCase() === "novela" ? "color: #000000; text-shadow: none;" : "";
 
         cardsDiv.innerHTML += `
           <a href="#" class="tarjeta-item">
             ${datoEtiqueta ? `<div class="tarjeta-badge">${datoEtiqueta}</div>` : ''}
             <img src="${urlImagen}" alt="${nombreTitulo}">
-            <div class="tarjeta-info">
-                <h3 class="tarjeta-titulo">${nombreTitulo}</h3>
+            <div class="tarjeta-info" style="background: ${degradado};">
+                <h3 class="tarjeta-titulo" style="${estiloTextoNovel}">${nombreTitulo}</h3>
             </div>
           </a>
         `;
