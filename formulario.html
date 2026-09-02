@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.25</title>
+  <title>Formulario Extendido de Registro v0.26</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -29,14 +29,11 @@
     h3 { color: #3ecf8e; border-bottom: 1px solid #27272a; padding-bottom: 6px; margin-top: 24px; }
     label { display: block; margin-top: 12px; margin-bottom: 6px; font-size: 0.875rem; color: #a1a1aa; }
 
-    input[type="text"], input[type="number"], input[type="date"], input[type="file"], .custom-combobox { width: 100%; }
-    input[type="text"], input[type="number"], input[type="date"] {
+    input[type="text"], input[type="number"], input[type="file"], .custom-combobox { width: 100%; }
+    input[type="text"], input[type="number"] {
       padding: 10px 12px; background: #09090b; border: 1px solid #27272a; border-radius: 8px; color: #f4f4f5; font-size: 15px; outline: none;
     }
-    input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus { border-color: #3ecf8e; }
-
-    /* Ocultamos el indicador/flecha por defecto de la fecha */
-    input[type="date"]::-webkit-calendar-picker-indicator { display: none; -webkit-appearance: none; }
+    input[type="text"]:focus, input[type="number"]:focus { border-color: #3ecf8e; }
 
     .row-inputs { display: flex; gap: 10px; }
     .row-inputs > div { flex: 1; }
@@ -189,11 +186,11 @@
       <div class="row-inputs">
         <div>
           <label for="fechaLanzRevistaInput">F. de Lanz.</label>
-          <input type="date" id="fechaLanzRevistaInput">
+          <input type="text" id="fechaLanzRevistaInput" placeholder="">
         </div>
         <div>
           <label for="fechaFinRevistaInput">Finalización</label>
-          <input type="date" id="fechaFinRevistaInput">
+          <input type="text" id="fechaFinRevistaInput" placeholder="">
         </div>
         <div>
           <label for="numCapRevistaInput">Cap.</label>
@@ -209,11 +206,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzTankobon">F. de Lanz.</label>
-            <input type="date" id="fechaLanzTankobon">
+            <input type="text" id="fechaLanzTankobon" placeholder="">
           </div>
           <div>
             <label for="fechaFinTankobon">Finalización</label>
-            <input type="date" id="fechaFinTankobon">
+            <input type="text" id="fechaFinTankobon" placeholder="">
           </div>
         </div>
         <div class="row-inputs">
@@ -229,11 +226,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzShinsoban">F. de Lanz.</label>
-            <input type="date" id="fechaLanzShinsoban">
+            <input type="text" id="fechaLanzShinsoban" placeholder="">
           </div>
           <div>
             <label for="fechaFinShinsoban">Finalización</label>
-            <input type="date" id="fechaFinShinsoban">
+            <input type="text" id="fechaFinShinsoban" placeholder="">
           </div>
         </div>
         <div class="row-inputs">
@@ -249,11 +246,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzKanzenban">F. de Lanz.</label>
-            <input type="date" id="fechaLanzKanzenban">
+            <input type="text" id="fechaLanzKanzenban" placeholder="">
           </div>
           <div>
             <label for="fechaFinKanzenban">Finalización</label>
-            <input type="date" id="fechaFinKanzenban">
+            <input type="text" id="fechaFinKanzenban" placeholder="">
           </div>
         </div>
         <div class="row-inputs">
@@ -269,11 +266,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzBunkoban">F. de Lanz.</label>
-            <input type="date" id="fechaLanzBunkoban">
+            <input type="text" id="fechaLanzBunkoban" placeholder="">
           </div>
           <div>
             <label for="fechaFinBunkoban">Finalización</label>
-            <input type="date" id="fechaFinBunkoban">
+            <input type="text" id="fechaFinBunkoban" placeholder="">
           </div>
         </div>
         <div class="row-inputs">
@@ -293,7 +290,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.25
+      Versión: v0.26
     </footer>
   </div>
 
@@ -613,34 +610,34 @@
       dibujo: document.getElementById('dibujoInput').value.trim(),
       editorial: document.getElementById('editorialInput').value.trim(),
       revista: document.getElementById('revistaInput').value.trim(),
-      revista_fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value || null,
-      revista_finalizacion: document.getElementById('fechaFinRevistaInput').value || null,
+      revista_fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value.trim() || null,
+      revista_finalizacion: document.getElementById('fechaFinRevistaInput').value.trim() || null,
       revista_num_capitulos: document.getElementById('numCapRevistaInput').value || null,
       tankobon: {
         sello: document.getElementById('selloTankobon').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzTankobon').value,
-        finalizacion: document.getElementById('fechaFinTankobon').value,
+        fecha_lanzamiento: document.getElementById('fechaLanzTankobon').value.trim(),
+        finalizacion: document.getElementById('fechaFinTankobon').value.trim(),
         num_tomos: document.getElementById('numTomosTankobon').value,
         num_capitulos: document.getElementById('numCapTankobon').value
       },
       shinsoban: {
         sello: document.getElementById('selloShinsoban').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzShinsoban').value,
-        finalizacion: document.getElementById('fechaFinShinsoban').value,
+        fecha_lanzamiento: document.getElementById('fechaLanzShinsoban').value.trim(),
+        finalizacion: document.getElementById('fechaFinShinsoban').value.trim(),
         num_tomos: document.getElementById('numTomosShinsoban').value,
         num_capitulos: document.getElementById('numCapShinsoban').value
       },
       kanzenban: {
         sello: document.getElementById('selloKanzenban').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzKanzenban').value,
-        finalizacion: document.getElementById('fechaFinKanzenban').value,
+        fecha_lanzamiento: document.getElementById('fechaLanzKanzenban').value.trim(),
+        finalizacion: document.getElementById('fechaFinKanzenban').value.trim(),
         num_tomos: document.getElementById('numTomosKanzenban').value,
         num_capitulos: document.getElementById('numCapKanzenban').value
       },
       bunkoban: {
         sello: document.getElementById('selloBunkoban').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzBunkoban').value,
-        finalizacion: document.getElementById('fechaFinBunkoban').value,
+        fecha_lanzamiento: document.getElementById('fechaLanzBunkoban').value.trim(),
+        finalizacion: document.getElementById('fechaFinBunkoban').value.trim(),
         num_tomos: document.getElementById('numTomosBunkoban').value,
         num_capitulos: document.getElementById('numCapBunkoban').value
       },
