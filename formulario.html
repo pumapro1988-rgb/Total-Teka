@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.24</title>
+  <title>Formulario Extendido de Registro v0.25</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -29,37 +29,14 @@
     h3 { color: #3ecf8e; border-bottom: 1px solid #27272a; padding-bottom: 6px; margin-top: 24px; }
     label { display: block; margin-top: 12px; margin-bottom: 6px; font-size: 0.875rem; color: #a1a1aa; }
 
-    input[type="text"], input[type="number"], input[type="date"], input[type="file"], .custom-combobox, .custom-datebox { width: 100%; }
+    input[type="text"], input[type="number"], input[type="date"], input[type="file"], .custom-combobox { width: 100%; }
     input[type="text"], input[type="number"], input[type="date"] {
       padding: 10px 12px; background: #09090b; border: 1px solid #27272a; border-radius: 8px; color: #f4f4f5; font-size: 15px; outline: none;
     }
     input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus { border-color: #3ecf8e; }
 
-    /* Estilos para Datebox Personalizado (Escribir + Botón Calendario) */
-    .custom-datebox { position: relative; display: flex; align-items: center; }
-    .datebox-input { width: 100%; padding-right: 40px !important; }
-    /* Ocultamos el indicador por defecto de webkit para usar el botón personalizado */
-    .datebox-input::-webkit-calendar-picker-indicator { display: none; -webkit-appearance: none; }
-    
-    .calendar-btn { 
-      position: absolute; 
-      right: 4px; 
-      top: 50%; 
-      transform: translateY(-50%); 
-      width: 32px; 
-      height: 32px; 
-      background: transparent; 
-      border: none; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      cursor: pointer; 
-      border-radius: 6px; 
-      z-index: 5; 
-      color: #71717a;
-    }
-    .calendar-btn:hover { color: #3ecf8e; background: #27272a; }
-    .calendar-btn svg { width: 16px; height: 16px; fill: currentColor; }
+    /* Ocultamos el indicador/flecha por defecto de la fecha */
+    input[type="date"]::-webkit-calendar-picker-indicator { display: none; -webkit-appearance: none; }
 
     .row-inputs { display: flex; gap: 10px; }
     .row-inputs > div { flex: 1; }
@@ -96,7 +73,6 @@
     .btn-submit { width: 100%; margin-top: 20px; padding: 14px; background: #3ecf8e; border: none; border-radius: 8px; font-weight: bold; color: #000; font-size: 16px; cursor: pointer; }
     .version-footer { margin-top: 16px; padding-top: 8px; border-top: 1px solid #27272a; text-align: right; font-size: 0.75rem; color: #71717a; }
 
-    /* Estilos para las Listas por Tipo */
     .obra-item { background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
     .obra-item img { width: 32px; height: 44px; object-fit: cover; border-radius: 4px; border: 1px solid #27272a; }
     .obra-info { display: flex; flex-direction: column; }
@@ -213,21 +189,11 @@
       <div class="row-inputs">
         <div>
           <label for="fechaLanzRevistaInput">F. de Lanz.</label>
-          <div class="custom-datebox">
-            <input type="date" id="fechaLanzRevistaInput" class="datebox-input">
-            <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaLanzRevistaInput')">
-              <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-            </button>
-          </div>
+          <input type="date" id="fechaLanzRevistaInput">
         </div>
         <div>
-          <label for="fechaFinRevistaInput">Finalizacion</label>
-          <div class="custom-datebox">
-            <input type="date" id="fechaFinRevistaInput" class="datebox-input">
-            <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaFinRevistaInput')">
-              <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-            </button>
-          </div>
+          <label for="fechaFinRevistaInput">Finalización</label>
+          <input type="date" id="fechaFinRevistaInput">
         </div>
         <div>
           <label for="numCapRevistaInput">Cap.</label>
@@ -243,21 +209,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzTankobon">F. de Lanz.</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaLanzTankobon" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaLanzTankobon')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaLanzTankobon">
           </div>
           <div>
             <label for="fechaFinTankobon">Finalización</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaFinTankobon" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaFinTankobon')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaFinTankobon">
           </div>
         </div>
         <div class="row-inputs">
@@ -273,21 +229,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzShinsoban">F. de Lanz.</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaLanzShinsoban" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaLanzShinsoban')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaLanzShinsoban">
           </div>
           <div>
             <label for="fechaFinShinsoban">Finalización</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaFinShinsoban" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaFinShinsoban')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaFinShinsoban">
           </div>
         </div>
         <div class="row-inputs">
@@ -303,21 +249,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzKanzenban">F. de Lanz.</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaLanzKanzenban" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaLanzKanzenban')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaLanzKanzenban">
           </div>
           <div>
             <label for="fechaFinKanzenban">Finalización</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaFinKanzenban" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaFinKanzenban')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaFinKanzenban">
           </div>
         </div>
         <div class="row-inputs">
@@ -333,21 +269,11 @@
         <div class="row-inputs">
           <div>
             <label for="fechaLanzBunkoban">F. de Lanz.</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaLanzBunkoban" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaLanzBunkoban')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaLanzBunkoban">
           </div>
           <div>
             <label for="fechaFinBunkoban">Finalización</label>
-            <div class="custom-datebox">
-              <input type="date" id="fechaFinBunkoban" class="datebox-input">
-              <button type="button" class="calendar-btn" onclick="abrirCalendario('fechaFinBunkoban')">
-                <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
-              </button>
-            </div>
+            <input type="date" id="fechaFinBunkoban">
           </div>
         </div>
         <div class="row-inputs">
@@ -367,11 +293,10 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.24
+      Versión: v0.25
     </footer>
   </div>
 
-  <!-- SECCIÓN DE LISTAS AGRUPADAS POR TIPO -->
   <div class="container-listas">
     <h2>📚 Obras Registradas por Tipo</h2>
     <div id="listas-agrupadas-container">
@@ -380,7 +305,6 @@
   </div>
 
 <script>
-  // CONFIGURACIÓN DE SUPABASE
   const SUPABASE_URL = 'https://opkserkawziqdsvkyhky.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_U6Ljq3yho2djlRpkhcn9Cg_febIPxRj';
   const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -400,17 +324,6 @@
   const btnAgregarGenero = document.getElementById("btn-agregar");
   const nombreInput = document.getElementById('nombreInput');
 
-  // EVENTO PARA ABRIR EL CALENDARIO DESDE EL BOTÓN
-  function abrirCalendario(inputId) {
-    const input = document.getElementById(inputId);
-    if (input && typeof input.showPicker === 'function') {
-      input.showPicker();
-    } else if (input) {
-      input.focus();
-    }
-  }
-
-  // EVENTO PARA BUSCAR SI YA EXISTE AL CAMBIAR O ESCRIBIR EL NOMBRE
   nombreInput.addEventListener('change', buscarYAutocompletar);
 
   async function buscarYAutocompletar() {
@@ -753,7 +666,6 @@
     }
   }
 
-  // FUNCIÓN PARA OBTENER Y LISTAR LAS OBRAS AGRUPADAS POR TIPO
   async function cargarObrasAgrupadas() {
     const container = document.getElementById('listas-agrupadas-container');
     const { data: obras, error } = await _supabase.from('mangas').select('*').order('created_at', { ascending: false });
