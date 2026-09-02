@@ -8,27 +8,25 @@
   <meta name="description" content="Toda la información sobre todos los temas posibles del mundo en la biblioteca mas grande del mundo.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* Estilos generales con el fondo oscuro de Yupmanga */
+    /* Estilos generales */
     *{ margin: 0; padding: 0; box-sizing: border-box; }
-    body{ background: rgb(9, 9, 11); color: white; font-family: sans-serif; }
-    .titulo{ width: 100%; }
+    body{ background: rgb(9, 9, 11); color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .titulo{ width: 100%; display: block; }
     nav{ text-align: center; padding: 10px; }
     
     /* Estilos del Carrusel */
-    .carousel-container { width: 100%; overflow: hidden; padding: 15px 0; background: rgb(9, 9, 11); }
-    .carousel-track { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+    .carousel-container { width: 100%; overflow: hidden; padding: 10px 0; background: rgb(9, 9, 11); }
+    .carousel-track { display: flex; gap: 8px; overflow-x: auto; padding: 0 12px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
     .carousel-track::-webkit-scrollbar { display: none; }
-    .btn-category { background: #2a2a2a; color: white; border: 1px solid #444; padding: 8px 16px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+    .btn-category { background: #2a2a2a; color: white; border: 1px solid #444; padding: 6px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; transition: 0.3s; }
     .btn-category.active { background: #007bff; border-color: #007bff; }
 
-    /* ==========================================================================
-       AJUSTE DE ANCHO: Cambiamos de 110px a 115px para ensanchar las tarjetas
-       ========================================================================== */
+    /* GRID DE TARJETAS */
     #cards { 
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
-      gap: 12px; 
-      padding: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 8px; 
+      padding: 8px;
       background-color: rgb(9, 9, 11); 
     }
     
@@ -43,21 +41,19 @@
       color: #ffffff;
     }
     
-    /* ==========================================================================
-       AJUSTE DE ALTO: Subimos a 152% para alargarlas proporcionalmente
-       ========================================================================== */
+    /* TARJETA INDIVIDUAL (Aspect Ratio Mantenido) */
     .tarjeta-item { 
       position: relative;
       width: 100%;
-      padding-top: 152%; 
-      background-color: rgb(24, 24, 27); 
+      padding-top: 145%; /* Proporción exacta de portadas */
+      background-color: #18181b; 
       overflow: hidden;
       display: block;
       text-decoration: none;
-      border-radius: 0px !important; /* Esquinas 100% rectas estilo YupManga */
+      border-radius: 2px;
     }
 
-    /* Imagen absoluta de fondo */
+    /* Imagen principal */
     .tarjeta-item img { 
       position: absolute;
       top: 0;
@@ -65,60 +61,56 @@
       width: 100%;
       height: 100%;
       object-fit: cover; 
-      border-radius: 0px !important;
-      transition: transform 0.3s ease;
       z-index: 1;
     }
 
-    .tarjeta-item:active img {
-      transform: scale(1.05); 
-    }
-
-    /* CONTENEDOR DE INFORMACIÓN */
-    .tarjeta-info { 
+    /* INSIGNIA SUPERIOR IZQUIERDA (AÑO / CAPÍTULO) */
+    .tarjeta-badge {
       position: absolute;
       top: 0;
       left: 0;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      z-index: 6;
+      border-bottom-right-radius: 3px;
+      line-height: 1.2;
+    }
+
+    /* CONTENEDOR DE TEXTO Y DEGRADADO INFERIOR */
+    .tarjeta-info { 
+      position: absolute;
+      bottom: 0;
+      left: 0;
       width: 100%;
-      height: 100%;
-      /* Padding inferior ajustado al mínimo (4px) para clavar el año abajo del todo */
-      padding: 12px 8px 4px 8px; 
+      padding: 24px 6px 6px 6px; 
       z-index: 5;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0) 100%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end; 
-      gap: 1px; /* Espaciado mínimo para que queden juntos pero independientes */
     }    
 
-    /* Título del contenido (Alineado a la izquierda) */
+    /* TÍTULO DE LA TARJETA */
     .tarjeta-titulo { 
-      font-size: 0.74rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: #ffffff;
       margin: 0;
-      line-height: 1.2;
-      text-align: left; 
+      line-height: 1.15;
+      text-align: center; 
       display: -webkit-box;
       -webkit-line-clamp: 2; /* Máximo 2 líneas */
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis; 
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     }    
 
-    /* ==========================================================================
-       EL AÑO: Ubicado exactamente en el mismo lugar que los números de YupManga
-       ========================================================================== */
-    .tarjeta-ano {
-      font-size: 0.65rem;
-      color: rgba(255, 255, 255, 0.85); 
-      text-align: left; 
-      font-weight: 600;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
-    }
-    
     /* Paginación y Footer */
-    #paginacion { display: flex; gap: 10px; justify-content: center; margin: 20px 0; align-items: center; }
+    #paginacion { display: flex; gap: 8px; justify-content: center; margin: 20px 0; align-items: center; }
     #paginacion button { padding: 8px 12px; border: none; border-radius: 4px; background: #27272a; color: white; cursor: pointer; font-weight: bold; }
     #paginacion button.activo { background: #007bff; }
     #paginacion span { color: white; font-weight: bold; }
@@ -252,9 +244,6 @@
       mostrardatos();
     }
 
-    /* ==========================================================================
-       DEGRADADOS AJUSTADOS MÁS BAJOS (Comienzan sutilmente desde el 65%)
-       ========================================================================== */
     function mostrardatos() {
       const cardsDiv = document.getElementById("cards");
       cardsDiv.innerHTML = "";
@@ -268,38 +257,16 @@
       const paginados = datosFiltrados.slice(inicio, inicio + itemsPorPagina);
 
       paginados.forEach(i => {
-        const añoContenido = i.año || ""; 
-        const tipoContenido = i.tipo || "Manga";
+        const datoEtiqueta = i.año || i.volumen || i.numero || ""; 
         const urlImagen = i.portada || i.imagen || i.imagen_url || i.url || "https://via.placeholder.com/150x210";
         const nombreTitulo = i.nombre || "Sin título";
 
-        // Ajustamos los tres puntos para que el color comience mucho más abajo (transparente hasta el 65%)
-        let degradadoInfo = "linear-gradient(to top, rgba(9, 9, 11, 0.95) 0%, rgba(9, 9, 11, 0.45) 35%, rgba(9, 9, 11, 0) 65%)";
-
-        if (tipoContenido.toLowerCase() === "manga") {
-          degradadoInfo = "linear-gradient(to top, rgba(37, 122, 248, 0.9) 0%, rgba(37, 122, 248, 0.4) 35%, rgba(37, 122, 248, 0) 65%)";
-        } else if (tipoContenido.toLowerCase() === "comic") {
-          degradadoInfo = "linear-gradient(to top, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.4) 35%, rgba(0, 123, 255, 0) 65%)";
-        } else if (tipoContenido.toLowerCase() === "libro") {
-          degradadoInfo = "linear-gradient(to top, rgba(40, 167, 69, 0.9) 0%, rgba(40, 167, 69, 0.4) 35%, rgba(40, 167, 69, 0) 65%)";
-        } else if (tipoContenido.toLowerCase() === "novela") {
-          degradadoInfo = "linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.45) 35%, rgba(255, 255, 255, 0) 65%)";
-        } else if (tipoContenido.toLowerCase() === "pelicula") {
-          degradadoInfo = "linear-gradient(to top, rgba(52, 58, 64, 0.9) 0%, rgba(52, 58, 64, 0.4) 35%, rgba(52, 58, 64, 0) 65%)";
-        } else if (tipoContenido.toLowerCase() === "serie") {
-          degradadoInfo = "linear-gradient(to top, rgba(234, 16, 20, 0.9) 0%, rgba(234, 16, 20, 0.4) 35%, rgba(234, 16, 20, 0) 65%)";
-        } else if (tipoContenido.toLowerCase() === "videojuego") {
-          degradadoInfo = "linear-gradient(to top, rgba(255, 193, 7, 0.9) 0%, rgba(255, 193, 7, 0.4) 35%, rgba(255, 193, 7, 0) 65%)";
-        }
-
-        const colorTextoEspecifico = tipoContenido.toLowerCase() === "novela" ? "color: #000000; text-shadow: none;" : "";
-
         cardsDiv.innerHTML += `
           <a href="#" class="tarjeta-item">
+            ${datoEtiqueta ? `<div class="tarjeta-badge">${datoEtiqueta}</div>` : ''}
             <img src="${urlImagen}" alt="${nombreTitulo}">
-            <div class="tarjeta-info" style="background: ${degradadoInfo};">
-                <h3 class="tarjeta-titulo" style="${colorTextoEspecifico}">${nombreTitulo}</h3>
-                <span class="tarjeta-ano" style="${colorTextoEspecifico}">${añoContenido}</span>
+            <div class="tarjeta-info">
+                <h3 class="tarjeta-titulo">${nombreTitulo}</h3>
             </div>
           </a>
         `;
