@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Total-Teka v0.46</title>
+  <title>Total-Teka v0.47</title>
   <meta charset="UTF-8">
   <meta name="author" content="Pumapro">
   <meta name="keywords" content="Películas, series, comics, mangas, libros, música">
@@ -45,7 +45,7 @@
     .tarjeta-item { 
       position: relative;
       width: 100%;
-      padding-top: 148%; /* Proporción ajustada */
+      padding-top: 148%;
       background-color: #18181b; 
       overflow: hidden;
       display: block;
@@ -74,24 +74,23 @@
       position: absolute;
       top: 0;
       left: 0;
-      background-color: rgba(0, 0, 0, 0.85);
       color: #ffffff;
       font-size: 0.75rem;
       font-weight: 800;
-      padding: 2px 6px;
+      padding: 3px 7px;
       z-index: 6;
-      border-bottom-right-radius: 3px;
+      border-bottom-right-radius: 4px;
       line-height: 1.2;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
 
-    /* CONTENEDOR DE TEXTO Y DEGRADADO INFERIOR (Ajustado más cerca del borde) */
+    /* CONTENEDOR DE TEXTO Y DEGRADADO INFERIOR */
     .tarjeta-info { 
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       width: 100%;
-      /* Padding inferior a 3px para pegar el texto abajo[span_1](start_span)[span_1](end_span) */
       padding: 24px 6px 3px 6px; 
       z-index: 5;
       display: flex;
@@ -106,10 +105,10 @@
       font-weight: 700;
       color: #ffffff;
       margin: 0;
-      line-height: 1.1; /* Reducido para eliminar el espacio invisible inferior */
+      line-height: 1.1;
       text-align: center; 
       display: -webkit-box;
-      -webkit-line-clamp: 2; /* Máximo 2 líneas */
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis; 
@@ -179,7 +178,7 @@
   <div id="paginacion"></div>
 
   <footer>
-    <p>Biblioteca de Pumapro y Paloma (v0.46)</p>
+    <p>Biblioteca de Pumapro y Paloma (v0.47)</p>
     <p>Todos los derechos reservados</p>
   </footer>
 
@@ -298,7 +297,7 @@
 
         cardsDiv.innerHTML += `
           <a href="#" class="tarjeta-item">
-            ${datoEtiqueta ? `<div class="tarjeta-badge">${datoEtiqueta}</div>` : ''}
+            ${datoEtiqueta ? `<div class="tarjeta-badge" style="background: ${degradado};">${datoEtiqueta}</div>` : ''}
             <img src="${urlImagen}" alt="${nombreTitulo}">
             <div class="tarjeta-info" style="background: ${degradado};">
                 <h3 class="tarjeta-titulo" style="${estiloTextoNovel}">${nombreTitulo}</h3>
