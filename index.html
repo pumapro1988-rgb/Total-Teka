@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Total-Teka v0.45</title>
+  <title>Total-Teka v0.46</title>
   <meta charset="UTF-8">
   <meta name="author" content="Pumapro">
   <meta name="keywords" content="Películas, series, comics, mangas, libros, música">
@@ -45,7 +45,7 @@
     .tarjeta-item { 
       position: relative;
       width: 100%;
-      padding-top: 145%; /* Proporción de portadas */
+      padding-top: 148%; /* Proporción ajustada */
       background-color: #18181b; 
       overflow: hidden;
       display: block;
@@ -84,17 +84,20 @@
       line-height: 1.2;
     }
 
-    /* CONTENEDOR DE TEXTO Y DEGRADADO INFERIOR */
+    /* CONTENEDOR DE TEXTO Y DEGRADADO INFERIOR (Ajustado más cerca del borde) */
     .tarjeta-info { 
       position: absolute;
       bottom: 0;
       left: 0;
+      right: 0;
       width: 100%;
-      padding: 24px 6px 6px 6px; 
+      /* Padding inferior a 3px para pegar el texto abajo[span_1](start_span)[span_1](end_span) */
+      padding: 24px 6px 3px 6px; 
       z-index: 5;
       display: flex;
       flex-direction: column;
       justify-content: flex-end; 
+      margin: 0;
     }    
 
     /* TÍTULO DE LA TARJETA */
@@ -103,7 +106,7 @@
       font-weight: 700;
       color: #ffffff;
       margin: 0;
-      line-height: 1.15;
+      line-height: 1.1; /* Reducido para eliminar el espacio invisible inferior */
       text-align: center; 
       display: -webkit-box;
       -webkit-line-clamp: 2; /* Máximo 2 líneas */
@@ -176,7 +179,7 @@
   <div id="paginacion"></div>
 
   <footer>
-    <p>Biblioteca de Pumapro y Paloma (v0.45)</p>
+    <p>Biblioteca de Pumapro y Paloma (v0.46)</p>
     <p>Todos los derechos reservados</p>
   </footer>
 
@@ -254,19 +257,19 @@
 
       switch(tipoNorm) {
         case "manga":
-          return "linear-gradient(to top, rgba(37, 122, 248, 0.9) 0%, rgba(37, 122, 248, 0.4) 60%, rgba(37, 122, 248, 0) 100%)";
+          return "linear-gradient(to top, rgba(37, 122, 248, 0.95) 0%, rgba(37, 122, 248, 0.45) 60%, rgba(37, 122, 248, 0) 100%)";
         case "comic":
-          return "linear-gradient(to top, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.4) 60%, rgba(0, 123, 255, 0) 100%)";
+          return "linear-gradient(to top, rgba(0, 123, 255, 0.95) 0%, rgba(0, 123, 255, 0.45) 60%, rgba(0, 123, 255, 0) 100%)";
         case "libro":
-          return "linear-gradient(to top, rgba(40, 167, 69, 0.9) 0%, rgba(40, 167, 69, 0.4) 60%, rgba(40, 167, 69, 0) 100%)";
+          return "linear-gradient(to top, rgba(40, 167, 69, 0.95) 0%, rgba(40, 167, 69, 0.45) 60%, rgba(40, 167, 69, 0) 100%)";
         case "novela":
           return "linear-gradient(to top, rgba(220, 220, 220, 0.95) 0%, rgba(220, 220, 220, 0.45) 60%, rgba(220, 220, 220, 0) 100%)";
         case "pelicula":
-          return "linear-gradient(to top, rgba(52, 58, 64, 0.9) 0%, rgba(52, 58, 64, 0.4) 60%, rgba(52, 58, 64, 0) 100%)";
+          return "linear-gradient(to top, rgba(52, 58, 64, 0.95) 0%, rgba(52, 58, 64, 0.45) 60%, rgba(52, 58, 64, 0) 100%)";
         case "serie":
-          return "linear-gradient(to top, rgba(234, 16, 20, 0.9) 0%, rgba(234, 16, 20, 0.4) 60%, rgba(234, 16, 20, 0) 100%)";
+          return "linear-gradient(to top, rgba(234, 16, 20, 0.95) 0%, rgba(234, 16, 20, 0.45) 60%, rgba(234, 16, 20, 0) 100%)";
         case "videojuego":
-          return "linear-gradient(to top, rgba(255, 193, 7, 0.9) 0%, rgba(255, 193, 7, 0.4) 60%, rgba(255, 193, 7, 0) 100%)";
+          return "linear-gradient(to top, rgba(255, 193, 7, 0.95) 0%, rgba(255, 193, 7, 0.45) 60%, rgba(255, 193, 7, 0) 100%)";
         default:
           return "linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0) 100%)";
       }
