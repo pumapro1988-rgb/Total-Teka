@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.26</title>
+  <title>Formulario Extendido de Registro v0.27</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -97,18 +97,40 @@
       <label for="essLatInput">Ess/Lat</label>
       <input type="text" id="essLatInput" placeholder="">
 
-      <label for="tipoInput">Tipo</label>
-      <div class="custom-combobox">
-        <input type="text" id="tipoInput" class="combobox-input" placeholder="" autocomplete="off">
-        <button type="button" class="arrow-btn" onclick="toggleMenu('menuTipo', this, event)">
-          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-        </button>
-        <div class="dropdown-menu" id="menuTipo">
-          <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manga')">Manga</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manhwa')">Manhwa</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manhua')">Manhua</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Novela')">Novela</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Cómic')">Cómic</div>
+      <!-- Fila: Tipo y Demografía juntos -->
+      <div class="row-inputs">
+        <div>
+          <label for="tipoInput">Tipo</label>
+          <div class="custom-combobox">
+            <input type="text" id="tipoInput" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuTipo', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuTipo">
+              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manga')">Manga</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manhwa')">Manhwa</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manhua')">Manhua</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Novela')">Novela</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Cómic')">Cómic</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="demografiaInput">Demografía</label>
+          <div class="custom-combobox">
+            <input type="text" id="demografiaInput" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuDemografia', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuDemografia">
+              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Shōnen')">Shōnen</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Seinen')">Seinen</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Shōjo')">Shōjo</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Josei')">Josei</div>
+              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Kodomo')">Kodomo</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -147,10 +169,32 @@
       </div>
 
       <label for="guionInput">Guión</label>
-      <input type="text" id="guionInput" placeholder="">
+      <div class="custom-combobox">
+        <input type="text" id="guionInput" class="combobox-input" placeholder="" autocomplete="off">
+        <button type="button" class="arrow-btn" onclick="toggleMenu('menuGuion', this, event)">
+          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+        </button>
+        <div class="dropdown-menu" id="menuGuion">
+          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'Akira Toriyama')">Akira Toriyama</div>
+          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'Eiichiro Oda')">Eiichiro Oda</div>
+          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'Hajime Isayama')">Hajime Isayama</div>
+          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'ONE')">ONE</div>
+        </div>
+      </div>
 
       <label for="dibujoInput">Dibujo</label>
-      <input type="text" id="dibujoInput" placeholder="">
+      <div class="custom-combobox">
+        <input type="text" id="dibujoInput" class="combobox-input" placeholder="" autocomplete="off">
+        <button type="button" class="arrow-btn" onclick="toggleMenu('menuDibujo', this, event)">
+          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+        </button>
+        <div class="dropdown-menu" id="menuDibujo">
+          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Yusuke Murata')">Yusuke Murata</div>
+          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Takeshi Obata')">Takeshi Obata</div>
+          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Kentaro Miura')">Kentaro Miura</div>
+          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Eiichiro Oda')">Eiichiro Oda</div>
+        </div>
+      </div>
 
       <label for="editorialInput">Editorial</label>
       <div class="custom-combobox">
@@ -290,7 +334,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.26
+      Versión: v0.27
     </footer>
   </div>
 
@@ -350,6 +394,7 @@
       document.getElementById('inglesInput').value = data.ingles || '';
       document.getElementById('essLatInput').value = data.ess_lat || '';
       document.getElementById('tipoInput').value = data.tipo || '';
+      document.getElementById('demografiaInput').value = data.demografia || '';
       document.getElementById('paisInput').value = data.pais || '';
       document.getElementById('autorInput').value = data.autor || '';
       document.getElementById('guionInput').value = data.guion || '';
@@ -603,6 +648,7 @@
       ingles: document.getElementById('inglesInput').value.trim(),
       ess_lat: document.getElementById('essLatInput').value.trim(),
       tipo: document.getElementById('tipoInput').value.trim() || 'Sin Tipo',
+      demografia: document.getElementById('demografiaInput').value.trim(),
       pais: document.getElementById('paisInput').value.trim(),
       genero: listaGeneros,
       autor: document.getElementById('autorInput').value.trim(),
