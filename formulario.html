@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.27</title>
+  <title>Formulario Extendido de Registro v0.28</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -330,11 +330,14 @@
         <span style="font-size: 0.8rem; color: #71717a;" id="previewStatus">Sin imagen seleccionada</span>
       </div>
 
+      <label for="linkInput">Link</label>
+      <input type="text" id="linkInput" placeholder="">
+
       <button type="button" class="btn-submit" onclick="guardarRegistro()">Guardar en Supabase</button>
     </form>
 
     <footer class="version-footer">
-      Versión: v0.27
+      Versión: v0.28
     </footer>
   </div>
 
@@ -404,6 +407,7 @@
       document.getElementById('fechaLanzRevistaInput').value = data.revista_fecha_lanzamiento || '';
       document.getElementById('fechaFinRevistaInput').value = data.revista_finalizacion || '';
       document.getElementById('numCapRevistaInput').value = data.revista_num_capitulos || '';
+      document.getElementById('linkInput').value = data.link || '';
 
       if (data.tankobon) {
         document.getElementById('selloTankobon').value = data.tankobon.sello || '';
@@ -659,6 +663,7 @@
       revista_fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value.trim() || null,
       revista_finalizacion: document.getElementById('fechaFinRevistaInput').value.trim() || null,
       revista_num_capitulos: document.getElementById('numCapRevistaInput').value || null,
+      link: document.getElementById('linkInput').value.trim(),
       tankobon: {
         sello: document.getElementById('selloTankobon').value.trim(),
         fecha_lanzamiento: document.getElementById('fechaLanzTankobon').value.trim(),
