@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.28</title>
+  <title>Formulario Extendido de Registro v0.29</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -97,7 +97,6 @@
       <label for="essLatInput">Ess/Lat</label>
       <input type="text" id="essLatInput" placeholder="">
 
-      <!-- Fila: Tipo y Demografía juntos -->
       <div class="row-inputs">
         <div>
           <label for="tipoInput">Tipo</label>
@@ -106,13 +105,7 @@
             <button type="button" class="arrow-btn" onclick="toggleMenu('menuTipo', this, event)">
               <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
             </button>
-            <div class="dropdown-menu" id="menuTipo">
-              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manga')">Manga</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manhwa')">Manhwa</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Manhua')">Manhua</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Novela')">Novela</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('tipoInput', 'menuTipo', 'Cómic')">Cómic</div>
-            </div>
+            <div class="dropdown-menu" id="menuTipo"></div>
           </div>
         </div>
 
@@ -123,13 +116,7 @@
             <button type="button" class="arrow-btn" onclick="toggleMenu('menuDemografia', this, event)">
               <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
             </button>
-            <div class="dropdown-menu" id="menuDemografia">
-              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Shōnen')">Shōnen</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Seinen')">Seinen</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Shōjo')">Shōjo</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Josei')">Josei</div>
-              <div class="dropdown-item" onclick="seleccionarOpcion('demografiaInput', 'menuDemografia', 'Kodomo')">Kodomo</div>
-            </div>
+            <div class="dropdown-menu" id="menuDemografia"></div>
           </div>
         </div>
       </div>
@@ -140,12 +127,7 @@
         <button type="button" class="arrow-btn" onclick="toggleMenu('menuPais', this, event)">
           <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
         </button>
-        <div class="dropdown-menu" id="menuPais">
-          <div class="dropdown-item" onclick="seleccionarOpcion('paisInput', 'menuPais', 'Japón')">Japón</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('paisInput', 'menuPais', 'Corea del Sur')">Corea del Sur</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('paisInput', 'menuPais', 'China')">China</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('paisInput', 'menuPais', 'Estados Unidos')">Estados Unidos</div>
-        </div>
+        <div class="dropdown-menu" id="menuPais"></div>
       </div>
 
       <div class="generos-container-section">
@@ -160,12 +142,7 @@
         <button type="button" class="arrow-btn" onclick="toggleMenu('menuAutor', this, event)">
           <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
         </button>
-        <div class="dropdown-menu" id="menuAutor">
-          <div class="dropdown-item" onclick="seleccionarOpcion('autorInput', 'menuAutor', 'Akira Toriyama')">Akira Toriyama</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('autorInput', 'menuAutor', 'Eiichiro Oda')">Eiichiro Oda</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('autorInput', 'menuAutor', 'Hajime Isayama')">Hajime Isayama</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('autorInput', 'menuAutor', 'Naoki Urasawa')">Naoki Urasawa</div>
-        </div>
+        <div class="dropdown-menu" id="menuAutor"></div>
       </div>
 
       <label for="guionInput">Guión</label>
@@ -174,12 +151,7 @@
         <button type="button" class="arrow-btn" onclick="toggleMenu('menuGuion', this, event)">
           <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
         </button>
-        <div class="dropdown-menu" id="menuGuion">
-          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'Akira Toriyama')">Akira Toriyama</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'Eiichiro Oda')">Eiichiro Oda</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'Hajime Isayama')">Hajime Isayama</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('guionInput', 'menuGuion', 'ONE')">ONE</div>
-        </div>
+        <div class="dropdown-menu" id="menuGuion"></div>
       </div>
 
       <label for="dibujoInput">Dibujo</label>
@@ -188,12 +160,7 @@
         <button type="button" class="arrow-btn" onclick="toggleMenu('menuDibujo', this, event)">
           <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
         </button>
-        <div class="dropdown-menu" id="menuDibujo">
-          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Yusuke Murata')">Yusuke Murata</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Takeshi Obata')">Takeshi Obata</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Kentaro Miura')">Kentaro Miura</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('dibujoInput', 'menuDibujo', 'Eiichiro Oda')">Eiichiro Oda</div>
-        </div>
+        <div class="dropdown-menu" id="menuDibujo"></div>
       </div>
 
       <label for="editorialInput">Editorial</label>
@@ -202,14 +169,7 @@
         <button type="button" class="arrow-btn" onclick="toggleMenu('menuEditorial', this, event)">
           <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
         </button>
-        <div class="dropdown-menu" id="menuEditorial">
-          <div class="dropdown-item" onclick="seleccionarOpcion('editorialInput', 'menuEditorial', 'Shueisha')">Shueisha</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('editorialInput', 'menuEditorial', 'Kodansha')">Kodansha</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('editorialInput', 'menuEditorial', 'Shogakukan')">Shogakukan</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('editorialInput', 'menuEditorial', 'Kadokawa')">Kadokawa</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('editorialInput', 'menuEditorial', 'Ivrea')">Ivrea</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('editorialInput', 'menuEditorial', 'Panini')">Panini</div>
-        </div>
+        <div class="dropdown-menu" id="menuEditorial"></div>
       </div>
 
       <label for="revistaInput">Revista</label>
@@ -218,13 +178,7 @@
         <button type="button" class="arrow-btn" onclick="toggleMenu('menuRevista', this, event)">
           <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
         </button>
-        <div class="dropdown-menu" id="menuRevista">
-          <div class="dropdown-item" onclick="seleccionarOpcion('revistaInput', 'menuRevista', 'Weekly Shōnen Jump')">Weekly Shōnen Jump</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('revistaInput', 'menuRevista', 'Weekly Shōnen Magazine')">Weekly Shōnen Magazine</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('revistaInput', 'menuRevista', 'Weekly Shōnen Sunday')">Weekly Shōnen Sunday</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('revistaInput', 'menuRevista', 'Young Jump')">Young Jump</div>
-          <div class="dropdown-item" onclick="seleccionarOpcion('revistaInput', 'menuRevista', 'Bessatsu Shōnen Magazine')">Bessatsu Shōnen Magazine</div>
-        </div>
+        <div class="dropdown-menu" id="menuRevista"></div>
       </div>
 
       <div class="row-inputs">
@@ -246,7 +200,13 @@
       <div class="edicion-block">
         <div class="edicion-block-title">Tankōbon</div>
         <label for="selloTankobon">Sello Editorial</label>
-        <input type="text" id="selloTankobon" placeholder="">
+        <div class="custom-combobox">
+          <input type="text" id="selloTankobon" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloTankobon', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuSelloTankobon"></div>
+        </div>
         <div class="row-inputs">
           <div>
             <label for="fechaLanzTankobon">F. de Lanz.</label>
@@ -266,7 +226,13 @@
       <div class="edicion-block">
         <div class="edicion-block-title">Shinsōban</div>
         <label for="selloShinsoban">Sello Editorial</label>
-        <input type="text" id="selloShinsoban" placeholder="">
+        <div class="custom-combobox">
+          <input type="text" id="selloShinsoban" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloShinsoban', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuSelloShinsoban"></div>
+        </div>
         <div class="row-inputs">
           <div>
             <label for="fechaLanzShinsoban">F. de Lanz.</label>
@@ -286,7 +252,13 @@
       <div class="edicion-block">
         <div class="edicion-block-title">Kanzenban</div>
         <label for="selloKanzenban">Sello Editorial</label>
-        <input type="text" id="selloKanzenban" placeholder="">
+        <div class="custom-combobox">
+          <input type="text" id="selloKanzenban" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloKanzenban', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuSelloKanzenban"></div>
+        </div>
         <div class="row-inputs">
           <div>
             <label for="fechaLanzKanzenban">F. de Lanz.</label>
@@ -306,7 +278,13 @@
       <div class="edicion-block">
         <div class="edicion-block-title">Bunkoban</div>
         <label for="selloBunkoban">Sello Editorial</label>
-        <input type="text" id="selloBunkoban" placeholder="">
+        <div class="custom-combobox">
+          <input type="text" id="selloBunkoban" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloBunkoban', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuSelloBunkoban"></div>
+        </div>
         <div class="row-inputs">
           <div>
             <label for="fechaLanzBunkoban">F. de Lanz.</label>
@@ -337,7 +315,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.28
+      Versión: v0.29
     </footer>
   </div>
 
@@ -358,11 +336,84 @@
   let registroExistenteId = null;
   let urlPortadaExistente = '';
 
-  const opcionesGeneros = [
-    "Acción", "Aventura", "Comedia", "Drama", "Ciencia Ficción",
-    "Fantasía", "Terror", "Romance", "Suspenso", "Misterio",
-    "Policial", "Documental", "Animación", "Telenovela"
-  ];
+  const catalogosBase = {
+    tipo: ["Manga", "Manhwa", "Manhua", "Novela", "Cómic"],
+    demografia: ["Shōnen", "Seinen", "Shōjo", "Josei", "Kodomo"],
+    pais: ["Japón", "Corea del Sur", "China", "Estados Unidos"],
+    generos: [
+      "Acción", "Aventura", "Comedia", "Drama", "Ciencia Ficción",
+      "Fantasía", "Terror", "Romance", "Suspenso", "Misterio",
+      "Policial", "Documental", "Animación", "Telenovela"
+    ],
+    autor: ["Akira Toriyama", "Eiichiro Oda", "Hajime Isayama", "Naoki Urasawa"],
+    guion: ["Akira Toriyama", "Eiichiro Oda", "Hajime Isayama", "ONE"],
+    dibujo: ["Yusuke Murata", "Takeshi Obata", "Kentaro Miura", "Eiichiro Oda"],
+    editorial: ["Shueisha", "Kodansha", "Shogakukan", "Kadokawa", "Ivrea", "Panini"],
+    revista: ["Weekly Shōnen Jump", "Weekly Shōnen Magazine", "Weekly Shōnen Sunday", "Young Jump", "Bessatsu Shōnen Magazine"],
+    sellos: ["Jump Comics", "Kodansha Comics", "Shonen Sunday Comics"]
+  };
+
+  let catalogos = JSON.parse(localStorage.getItem('catalogos_obras')) || catalogosBase;
+
+  function guardarCatalogos() {
+    localStorage.setItem('catalogos_obras', JSON.stringify(catalogos));
+  }
+
+  function agregarOpcionesSinRepetir(clave, listaNuevosValores) {
+    if (!catalogos[clave]) catalogos[clave] = [];
+    listaNuevosValores.forEach(val => {
+      const limpio = val.trim();
+      if (limpio !== '') {
+        const existe = catalogos[clave].some(item => item.toLowerCase() === limpio.toLowerCase());
+        if (!existe) {
+          catalogos[clave].push(limpio);
+        }
+      }
+    });
+    guardarCatalogos();
+  }
+
+  function renderizarMenu(menuId, inputId, lista) {
+    const menu = document.getElementById(menuId);
+    if (!menu) return;
+    menu.innerHTML = '';
+    lista.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'dropdown-item';
+      div.dataset.value = item;
+      div.textContent = item;
+      div.onclick = () => seleccionarOpcion(inputId, menuId, item);
+      menu.appendChild(div);
+    });
+  }
+
+  function actualizarTodosLosMenus() {
+    renderizarMenu('menuTipo', 'tipoInput', catalogos.tipo);
+    renderizarMenu('menuDemografia', 'demografiaInput', catalogos.demografia);
+    renderizarMenu('menuPais', 'paisInput', catalogos.pais);
+    renderizarMenu('menuAutor', 'autorInput', catalogos.autor);
+    renderizarMenu('menuGuion', 'guionInput', catalogos.guion);
+    renderizarMenu('menuDibujo', 'dibujoInput', catalogos.dibujo);
+    renderizarMenu('menuEditorial', 'editorialInput', catalogos.editorial);
+    renderizarMenu('menuRevista', 'revistaInput', catalogos.revista);
+    
+    renderizarMenu('menuSelloTankobon', 'selloTankobon', catalogos.sellos);
+    renderizarMenu('menuSelloShinsoban', 'selloShinsoban', catalogos.sellos);
+    renderizarMenu('menuSelloKanzenban', 'selloKanzenban', catalogos.sellos);
+    renderizarMenu('menuSelloBunkoban', 'selloBunkoban', catalogos.sellos);
+
+    const inputsGeneros = document.querySelectorAll('.genero-input-field');
+    inputsGeneros.forEach(input => {
+      const parentCombobox = input.closest('.custom-combobox');
+      if (parentCombobox) {
+        const dropdownMenu = parentCombobox.querySelector('.dropdown-menu');
+        if (dropdownMenu) {
+          renderizarMenu(dropdownMenu.id, input.id, catalogos.generos);
+        }
+      }
+    });
+    sincronizarOpcionesGeneros();
+  }
 
   const contenedorGeneros = document.getElementById("contenedor-generos");
   const btnAgregarGenero = document.getElementById("btn-agregar");
@@ -512,18 +563,6 @@
     divMenu.className = "dropdown-menu";
     divMenu.id = idMenu;
 
-    opcionesGeneros.forEach(gen => {
-      const item = document.createElement("div");
-      item.className = "dropdown-item";
-      item.dataset.value = gen;
-      item.textContent = gen;
-      item.onclick = () => {
-        seleccionarOpcion(idInput, idMenu, gen);
-        sincronizarOpcionesGeneros();
-      };
-      divMenu.appendChild(item);
-    });
-
     divCombobox.appendChild(input);
     divCombobox.appendChild(btnArrow);
     divCombobox.appendChild(divMenu);
@@ -542,7 +581,7 @@
     }
 
     contenedorGeneros.appendChild(divGroup);
-    sincronizarOpcionesGeneros();
+    renderizarMenu(idMenu, idInput, catalogos.generos);
   }
 
   function sincronizarOpcionesGeneros() {
@@ -553,6 +592,7 @@
 
     inputsGeneros.forEach(inputActual => {
       const parentCombobox = inputActual.closest('.custom-combobox');
+      if (!parentCombobox) return;
       const dropdownItems = parentCombobox.querySelectorAll('.dropdown-item');
 
       dropdownItems.forEach(item => {
@@ -587,7 +627,10 @@
     document.getElementById(inputId).value = valor;
     document.getElementById(menuId).classList.remove('show');
     const parentContainer = document.getElementById(inputId).closest('.custom-combobox');
-    parentContainer.querySelector('.arrow-btn').classList.remove('open');
+    if (parentContainer) {
+      parentContainer.querySelector('.arrow-btn').classList.remove('open');
+    }
+    sincronizarOpcionesGeneros();
   }
 
   document.addEventListener('click', (event) => {
@@ -639,6 +682,23 @@
     if (generosUnicos.size !== listaGeneros.length) {
       return alert('No podés incluir géneros duplicados en distintas casillas.');
     }
+
+    // Actualizar catálogos dinámicamente con los valores ingresados
+    agregarOpcionesSinRepetir('pais', [document.getElementById('paisInput').value]);
+    agregarOpcionesSinRepetir('generos', listaGeneros);
+    agregarOpcionesSinRepetir('autor', [document.getElementById('autorInput').value]);
+    agregarOpcionesSinRepetir('guion', [document.getElementById('guionInput').value]);
+    agregarOpcionesSinRepetir('dibujo', [document.getElementById('dibujoInput').value]);
+    agregarOpcionesSinRepetir('editorial', [document.getElementById('editorialInput').value]);
+    agregarOpcionesSinRepetir('revista', [document.getElementById('revistaInput').value]);
+    agregarOpcionesSinRepetir('sellos', [
+      document.getElementById('selloTankobon').value,
+      document.getElementById('selloShinsoban').value,
+      document.getElementById('selloKanzenban').value,
+      document.getElementById('selloBunkoban').value
+    ]);
+
+    actualizarTodosLosMenus();
 
     let portadaUrl = urlPortadaExistente;
     if (archivoSeleccionado) {
@@ -761,7 +821,10 @@
     container.innerHTML = html;
   }
 
-  window.addEventListener('DOMContentLoaded', cargarObrasAgrupadas);
+  window.addEventListener('DOMContentLoaded', () => {
+    actualizarTodosLosMenus();
+    cargarObrasAgrupadas();
+  });
 </script>
 
 </body>
