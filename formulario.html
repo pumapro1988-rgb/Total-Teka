@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.30</title>
+  <title>Formulario Extendido de Registro v0.31</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -20,10 +20,7 @@
       flex-direction: column;
     }
 
-    .container-listas {
-      max-width: 800px;
-      margin: 0 auto;
-    }
+    .container-listas { max-width: 800px; margin: 0 auto; }
     
     h2 { margin-top: 0; margin-bottom: 16px; color: #3ecf8e; font-size: 1.2rem; }
     h3 { color: #3ecf8e; border-bottom: 1px solid #27272a; padding-bottom: 6px; margin-top: 24px; }
@@ -94,7 +91,7 @@
       <label for="inglesInput">Inglés</label>
       <input type="text" id="inglesInput" placeholder="">
 
-      <label for="essLatInput">Ess/Lat</label>
+      <label for="essLatInput">Esp/Lat</label>
       <input type="text" id="essLatInput" placeholder="">
 
       <div class="row-inputs">
@@ -183,7 +180,7 @@
         </div>
       </div>
 
-      <!-- Campo Plataforma (Específico para Web Novel) -->
+      <!-- Campo Plataforma (Específico para Novela web) -->
       <div class="campo-wn hidden">
         <label for="plataformaInput">Plataforma</label>
         <div class="custom-combobox">
@@ -195,7 +192,7 @@
         </div>
       </div>
 
-      <!-- Fechas / Cap / Tomos Estándar y Web Novel -->
+      <!-- Fechas / Cap / Tomos -->
       <div class="row-inputs">
         <div>
           <label for="fechaLanzRevistaInput">F. de Lanz.</label>
@@ -322,7 +319,7 @@
         </div>
       </div>
 
-      <!-- SECCIÓN REVISIÓN IMPRESA (Solo para Web Novel) -->
+      <!-- SECCIÓN REVISIÓN IMPRESA (Solo para Novela web) -->
       <div class="campo-wn hidden">
         <div class="edicion-block">
           <div class="edicion-block-title">Revisión Impresa</div>
@@ -365,7 +362,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.30
+      Versión: v0.31
     </footer>
   </div>
 
@@ -387,7 +384,7 @@
   let urlPortadaExistente = '';
 
   const catalogosBase = {
-    tipo: ["Manga", "Manhwa", "Manhua", "Novela", "Web Novel", "Cómic"],
+    tipo: ["Manga", "Manhwa", "Manhua", "Novela", "Novela web", "Cómic"],
     demografia: ["Shōnen", "Seinen", "Shōjo", "Josei", "Kodomo"],
     pais: ["Japón", "Corea del Sur", "China", "Estados Unidos"],
     generos: [
@@ -474,7 +471,7 @@
     const elementosEstandar = document.querySelectorAll('.campo-estandar');
     const elementosWN = document.querySelectorAll('.campo-wn');
 
-    if (tipoVal === 'web novel') {
+    if (tipoVal === 'novela web' || tipoVal === 'web novel') {
       elementosEstandar.forEach(el => el.classList.add('hidden'));
       elementosWN.forEach(el => el.classList.remove('hidden'));
     } else {
@@ -785,7 +782,7 @@
       portada_url: portadaUrl
     };
 
-    if (tipoActual.toLowerCase() === 'web novel') {
+    if (tipoActual.toLowerCase() === 'novela web' || tipoActual.toLowerCase() === 'web novel') {
       payload.plataforma = document.getElementById('plataformaInput').value.trim();
       payload.revista_fecha_lanzamiento = document.getElementById('fechaLanzRevistaInput').value.trim() || null;
       payload.revista_finalizacion = document.getElementById('fechaFinRevistaInput').value.trim() || null;
@@ -912,3 +909,4 @@
 
 </body>
 </html>
+
