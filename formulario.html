@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.29</title>
+  <title>Formulario Extendido de Registro v0.30</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -101,7 +101,7 @@
         <div>
           <label for="tipoInput">Tipo</label>
           <div class="custom-combobox">
-            <input type="text" id="tipoInput" class="combobox-input" placeholder="" autocomplete="off">
+            <input type="text" id="tipoInput" class="combobox-input" placeholder="" autocomplete="off" oninput="evaluarTipoFormulario()">
             <button type="button" class="arrow-btn" onclick="toggleMenu('menuTipo', this, event)">
               <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
             </button>
@@ -109,7 +109,7 @@
           </div>
         </div>
 
-        <div>
+        <div class="campo-estandar">
           <label for="demografiaInput">Demografía</label>
           <div class="custom-combobox">
             <input type="text" id="demografiaInput" class="combobox-input" placeholder="" autocomplete="off">
@@ -145,42 +145,57 @@
         <div class="dropdown-menu" id="menuAutor"></div>
       </div>
 
-      <label for="guionInput">Guión</label>
-      <div class="custom-combobox">
-        <input type="text" id="guionInput" class="combobox-input" placeholder="" autocomplete="off">
-        <button type="button" class="arrow-btn" onclick="toggleMenu('menuGuion', this, event)">
-          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-        </button>
-        <div class="dropdown-menu" id="menuGuion"></div>
+      <div class="campo-estandar">
+        <label for="guionInput">Guión</label>
+        <div class="custom-combobox">
+          <input type="text" id="guionInput" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuGuion', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuGuion"></div>
+        </div>
+
+        <label for="dibujoInput">Dibujo</label>
+        <div class="custom-combobox">
+          <input type="text" id="dibujoInput" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuDibujo', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuDibujo"></div>
+        </div>
+
+        <label for="editorialInput">Editorial</label>
+        <div class="custom-combobox">
+          <input type="text" id="editorialInput" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuEditorial', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuEditorial"></div>
+        </div>
+
+        <label for="revistaInput">Revista</label>
+        <div class="custom-combobox">
+          <input type="text" id="revistaInput" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuRevista', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuRevista"></div>
+        </div>
       </div>
 
-      <label for="dibujoInput">Dibujo</label>
-      <div class="custom-combobox">
-        <input type="text" id="dibujoInput" class="combobox-input" placeholder="" autocomplete="off">
-        <button type="button" class="arrow-btn" onclick="toggleMenu('menuDibujo', this, event)">
-          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-        </button>
-        <div class="dropdown-menu" id="menuDibujo"></div>
+      <!-- Campo Plataforma (Específico para Web Novel) -->
+      <div class="campo-wn hidden">
+        <label for="plataformaInput">Plataforma</label>
+        <div class="custom-combobox">
+          <input type="text" id="plataformaInput" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuPlataforma', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuPlataforma"></div>
+        </div>
       </div>
 
-      <label for="editorialInput">Editorial</label>
-      <div class="custom-combobox">
-        <input type="text" id="editorialInput" class="combobox-input" placeholder="" autocomplete="off">
-        <button type="button" class="arrow-btn" onclick="toggleMenu('menuEditorial', this, event)">
-          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-        </button>
-        <div class="dropdown-menu" id="menuEditorial"></div>
-      </div>
-
-      <label for="revistaInput">Revista</label>
-      <div class="custom-combobox">
-        <input type="text" id="revistaInput" class="combobox-input" placeholder="" autocomplete="off">
-        <button type="button" class="arrow-btn" onclick="toggleMenu('menuRevista', this, event)">
-          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-        </button>
-        <div class="dropdown-menu" id="menuRevista"></div>
-      </div>
-
+      <!-- Fechas / Cap / Tomos Estándar y Web Novel -->
       <div class="row-inputs">
         <div>
           <label for="fechaLanzRevistaInput">F. de Lanz.</label>
@@ -194,110 +209,145 @@
           <label for="numCapRevistaInput">Cap.</label>
           <input type="number" id="numCapRevistaInput" min="0" placeholder="">
         </div>
-      </div>
-
-      <!-- SECCIONES DE EDICIONES -->
-      <div class="edicion-block">
-        <div class="edicion-block-title">Tankōbon</div>
-        <label for="selloTankobon">Sello Editorial</label>
-        <div class="custom-combobox">
-          <input type="text" id="selloTankobon" class="combobox-input" placeholder="" autocomplete="off">
-          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloTankobon', this, event)">
-            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-          </button>
-          <div class="dropdown-menu" id="menuSelloTankobon"></div>
-        </div>
-        <div class="row-inputs">
-          <div>
-            <label for="fechaLanzTankobon">F. de Lanz.</label>
-            <input type="text" id="fechaLanzTankobon" placeholder="">
-          </div>
-          <div>
-            <label for="fechaFinTankobon">Finalización</label>
-            <input type="text" id="fechaFinTankobon" placeholder="">
-          </div>
-        </div>
-        <div class="row-inputs">
-          <div><label for="numTomosTankobon">N° de Tomos</label><input type="number" id="numTomosTankobon" min="0"></div>
-          <div><label for="numCapTankobon">N° de Cap.</label><input type="number" id="numCapTankobon" min="0"></div>
+        <div class="campo-wn hidden">
+          <label for="numTomosWnInput">Tomos</label>
+          <input type="number" id="numTomosWnInput" min="0" placeholder="">
         </div>
       </div>
 
-      <div class="edicion-block">
-        <div class="edicion-block-title">Shinsōban</div>
-        <label for="selloShinsoban">Sello Editorial</label>
-        <div class="custom-combobox">
-          <input type="text" id="selloShinsoban" class="combobox-input" placeholder="" autocomplete="off">
-          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloShinsoban', this, event)">
-            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-          </button>
-          <div class="dropdown-menu" id="menuSelloShinsoban"></div>
-        </div>
-        <div class="row-inputs">
-          <div>
-            <label for="fechaLanzShinsoban">F. de Lanz.</label>
-            <input type="text" id="fechaLanzShinsoban" placeholder="">
+      <!-- SECCIONES DE EDICIONES ESTÁNDAR -->
+      <div class="campo-estandar">
+        <div class="edicion-block">
+          <div class="edicion-block-title">Tankōbon</div>
+          <label for="selloTankobon">Sello Editorial</label>
+          <div class="custom-combobox">
+            <input type="text" id="selloTankobon" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloTankobon', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuSelloTankobon"></div>
           </div>
-          <div>
-            <label for="fechaFinShinsoban">Finalización</label>
-            <input type="text" id="fechaFinShinsoban" placeholder="">
+          <div class="row-inputs">
+            <div>
+              <label for="fechaLanzTankobon">F. de Lanz.</label>
+              <input type="text" id="fechaLanzTankobon" placeholder="">
+            </div>
+            <div>
+              <label for="fechaFinTankobon">Finalización</label>
+              <input type="text" id="fechaFinTankobon" placeholder="">
+            </div>
+          </div>
+          <div class="row-inputs">
+            <div><label for="numTomosTankobon">N° de Tomos</label><input type="number" id="numTomosTankobon" min="0"></div>
+            <div><label for="numCapTankobon">N° de Cap.</label><input type="number" id="numCapTankobon" min="0"></div>
           </div>
         </div>
-        <div class="row-inputs">
-          <div><label for="numTomosShinsoban">N° de Tomos</label><input type="number" id="numTomosShinsoban" min="0"></div>
-          <div><label for="numCapShinsoban">N° de Cap.</label><input type="number" id="numCapShinsoban" min="0"></div>
+
+        <div class="edicion-block">
+          <div class="edicion-block-title">Shinsōban</div>
+          <label for="selloShinsoban">Sello Editorial</label>
+          <div class="custom-combobox">
+            <input type="text" id="selloShinsoban" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloShinsoban', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuSelloShinsoban"></div>
+          </div>
+          <div class="row-inputs">
+            <div>
+              <label for="fechaLanzShinsoban">F. de Lanz.</label>
+              <input type="text" id="fechaLanzShinsoban" placeholder="">
+            </div>
+            <div>
+              <label for="fechaFinShinsoban">Finalización</label>
+              <input type="text" id="fechaFinShinsoban" placeholder="">
+            </div>
+          </div>
+          <div class="row-inputs">
+            <div><label for="numTomosShinsoban">N° de Tomos</label><input type="number" id="numTomosShinsoban" min="0"></div>
+            <div><label for="numCapShinsoban">N° de Cap.</label><input type="number" id="numCapShinsoban" min="0"></div>
+          </div>
+        </div>
+
+        <div class="edicion-block">
+          <div class="edicion-block-title">Kanzenban</div>
+          <label for="selloKanzenban">Sello Editorial</label>
+          <div class="custom-combobox">
+            <input type="text" id="selloKanzenban" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloKanzenban', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuSelloKanzenban"></div>
+          </div>
+          <div class="row-inputs">
+            <div>
+              <label for="fechaLanzKanzenban">F. de Lanz.</label>
+              <input type="text" id="fechaLanzKanzenban" placeholder="">
+            </div>
+            <div>
+              <label for="fechaFinKanzenban">Finalización</label>
+              <input type="text" id="fechaFinKanzenban" placeholder="">
+            </div>
+          </div>
+          <div class="row-inputs">
+            <div><label for="numTomosKanzenban">N° de Tomos</label><input type="number" id="numTomosKanzenban" min="0"></div>
+            <div><label for="numCapKanzenban">N° de Cap.</label><input type="number" id="numCapKanzenban" min="0"></div>
+          </div>
+        </div>
+
+        <div class="edicion-block">
+          <div class="edicion-block-title">Bunkoban</div>
+          <label for="selloBunkoban">Sello Editorial</label>
+          <div class="custom-combobox">
+            <input type="text" id="selloBunkoban" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloBunkoban', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuSelloBunkoban"></div>
+          </div>
+          <div class="row-inputs">
+            <div>
+              <label for="fechaLanzBunkoban">F. de Lanz.</label>
+              <input type="text" id="fechaLanzBunkoban" placeholder="">
+            </div>
+            <div>
+              <label for="fechaFinBunkoban">Finalización</label>
+              <input type="text" id="fechaFinBunkoban" placeholder="">
+            </div>
+          </div>
+          <div class="row-inputs">
+            <div><label for="numTomosBunkoban">N° de Tomos</label><input type="number" id="numTomosBunkoban" min="0"></div>
+            <div><label for="numCapBunkoban">N° de Cap.</label><input type="number" id="numCapBunkoban" min="0"></div>
+          </div>
         </div>
       </div>
 
-      <div class="edicion-block">
-        <div class="edicion-block-title">Kanzenban</div>
-        <label for="selloKanzenban">Sello Editorial</label>
-        <div class="custom-combobox">
-          <input type="text" id="selloKanzenban" class="combobox-input" placeholder="" autocomplete="off">
-          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloKanzenban', this, event)">
-            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-          </button>
-          <div class="dropdown-menu" id="menuSelloKanzenban"></div>
-        </div>
-        <div class="row-inputs">
-          <div>
-            <label for="fechaLanzKanzenban">F. de Lanz.</label>
-            <input type="text" id="fechaLanzKanzenban" placeholder="">
+      <!-- SECCIÓN REVISIÓN IMPRESA (Solo para Web Novel) -->
+      <div class="campo-wn hidden">
+        <div class="edicion-block">
+          <div class="edicion-block-title">Revisión Impresa</div>
+          <label for="editorialRevisionInput">Editorial</label>
+          <div class="custom-combobox">
+            <input type="text" id="editorialRevisionInput" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuEditorialRevision', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuEditorialRevision"></div>
           </div>
-          <div>
-            <label for="fechaFinKanzenban">Finalización</label>
-            <input type="text" id="fechaFinKanzenban" placeholder="">
+          <div class="row-inputs">
+            <div>
+              <label for="fechaLanzRevisionInput">F. de Lanz.</label>
+              <input type="text" id="fechaLanzRevisionInput" placeholder="">
+            </div>
+            <div>
+              <label for="fechaFinRevisionInput">Finalización</label>
+              <input type="text" id="fechaFinRevisionInput" placeholder="">
+            </div>
           </div>
-        </div>
-        <div class="row-inputs">
-          <div><label for="numTomosKanzenban">N° de Tomos</label><input type="number" id="numTomosKanzenban" min="0"></div>
-          <div><label for="numCapKanzenban">N° de Cap.</label><input type="number" id="numCapKanzenban" min="0"></div>
-        </div>
-      </div>
-
-      <div class="edicion-block">
-        <div class="edicion-block-title">Bunkoban</div>
-        <label for="selloBunkoban">Sello Editorial</label>
-        <div class="custom-combobox">
-          <input type="text" id="selloBunkoban" class="combobox-input" placeholder="" autocomplete="off">
-          <button type="button" class="arrow-btn" onclick="toggleMenu('menuSelloBunkoban', this, event)">
-            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-          </button>
-          <div class="dropdown-menu" id="menuSelloBunkoban"></div>
-        </div>
-        <div class="row-inputs">
-          <div>
-            <label for="fechaLanzBunkoban">F. de Lanz.</label>
-            <input type="text" id="fechaLanzBunkoban" placeholder="">
+          <div class="row-inputs">
+            <div><label for="numCapRevisionInput">Cap.</label><input type="number" id="numCapRevisionInput" min="0"></div>
+            <div><label for="numTomosRevisionInput">Tomos</label><input type="number" id="numTomosRevisionInput" min="0"></div>
           </div>
-          <div>
-            <label for="fechaFinBunkoban">Finalización</label>
-            <input type="text" id="fechaFinBunkoban" placeholder="">
-          </div>
-        </div>
-        <div class="row-inputs">
-          <div><label for="numTomosBunkoban">N° de Tomos</label><input type="number" id="numTomosBunkoban" min="0"></div>
-          <div><label for="numCapBunkoban">N° de Cap.</label><input type="number" id="numCapBunkoban" min="0"></div>
         </div>
       </div>
 
@@ -315,7 +365,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.29
+      Versión: v0.30
     </footer>
   </div>
 
@@ -337,7 +387,7 @@
   let urlPortadaExistente = '';
 
   const catalogosBase = {
-    tipo: ["Manga", "Manhwa", "Manhua", "Novela", "Cómic"],
+    tipo: ["Manga", "Manhwa", "Manhua", "Novela", "Web Novel", "Cómic"],
     demografia: ["Shōnen", "Seinen", "Shōjo", "Josei", "Kodomo"],
     pais: ["Japón", "Corea del Sur", "China", "Estados Unidos"],
     generos: [
@@ -350,7 +400,8 @@
     dibujo: ["Yusuke Murata", "Takeshi Obata", "Kentaro Miura", "Eiichiro Oda"],
     editorial: ["Shueisha", "Kodansha", "Shogakukan", "Kadokawa", "Ivrea", "Panini"],
     revista: ["Weekly Shōnen Jump", "Weekly Shōnen Magazine", "Weekly Shōnen Sunday", "Young Jump", "Bessatsu Shōnen Magazine"],
-    sellos: ["Jump Comics", "Kodansha Comics", "Shonen Sunday Comics"]
+    sellos: ["Jump Comics", "Kodansha Comics", "Shonen Sunday Comics"],
+    plataforma: ["Syosetu", "Kakuyomu", "Munpia", "Naver Series", "Webnovel"]
   };
 
   let catalogos = JSON.parse(localStorage.getItem('catalogos_obras')) || catalogosBase;
@@ -362,6 +413,7 @@
   function agregarOpcionesSinRepetir(clave, listaNuevosValores) {
     if (!catalogos[clave]) catalogos[clave] = [];
     listaNuevosValores.forEach(val => {
+      if (!val) return;
       const limpio = val.trim();
       if (limpio !== '') {
         const existe = catalogos[clave].some(item => item.toLowerCase() === limpio.toLowerCase());
@@ -396,7 +448,9 @@
     renderizarMenu('menuDibujo', 'dibujoInput', catalogos.dibujo);
     renderizarMenu('menuEditorial', 'editorialInput', catalogos.editorial);
     renderizarMenu('menuRevista', 'revistaInput', catalogos.revista);
-    
+    renderizarMenu('menuPlataforma', 'plataformaInput', catalogos.plataforma);
+    renderizarMenu('menuEditorialRevision', 'editorialRevisionInput', catalogos.editorial);
+
     renderizarMenu('menuSelloTankobon', 'selloTankobon', catalogos.sellos);
     renderizarMenu('menuSelloShinsoban', 'selloShinsoban', catalogos.sellos);
     renderizarMenu('menuSelloKanzenban', 'selloKanzenban', catalogos.sellos);
@@ -413,6 +467,20 @@
       }
     });
     sincronizarOpcionesGeneros();
+  }
+
+  function evaluarTipoFormulario() {
+    const tipoVal = document.getElementById('tipoInput').value.trim().toLowerCase();
+    const elementosEstandar = document.querySelectorAll('.campo-estandar');
+    const elementosWN = document.querySelectorAll('.campo-wn');
+
+    if (tipoVal === 'web novel') {
+      elementosEstandar.forEach(el => el.classList.add('hidden'));
+      elementosWN.forEach(el => el.classList.remove('hidden'));
+    } else {
+      elementosEstandar.forEach(el => el.classList.remove('hidden'));
+      elementosWN.forEach(el => el.classList.add('hidden'));
+    }
   }
 
   const contenedorGeneros = document.getElementById("contenedor-generos");
@@ -460,6 +528,17 @@
       document.getElementById('numCapRevistaInput').value = data.revista_num_capitulos || '';
       document.getElementById('linkInput').value = data.link || '';
 
+      document.getElementById('plataformaInput').value = data.plataforma || '';
+      document.getElementById('numTomosWnInput').value = data.wn_num_tomos || '';
+
+      if (data.revision_impresa) {
+        document.getElementById('editorialRevisionInput').value = data.revision_impresa.editorial || '';
+        document.getElementById('fechaLanzRevisionInput').value = data.revision_impresa.fecha_lanzamiento || '';
+        document.getElementById('fechaFinRevisionInput').value = data.revision_impresa.finalizacion || '';
+        document.getElementById('numCapRevisionInput').value = data.revision_impresa.num_capitulos || '';
+        document.getElementById('numTomosRevisionInput').value = data.revision_impresa.num_tomos || '';
+      }
+
       if (data.tankobon) {
         document.getElementById('selloTankobon').value = data.tankobon.sello || '';
         document.getElementById('fechaLanzTankobon').value = data.tankobon.fecha_lanzamiento || '';
@@ -468,29 +547,7 @@
         document.getElementById('numCapTankobon').value = data.tankobon.num_capitulos || '';
       }
 
-      if (data.shinsoban) {
-        document.getElementById('selloShinsoban').value = data.shinsoban.sello || '';
-        document.getElementById('fechaLanzShinsoban').value = data.shinsoban.fecha_lanzamiento || '';
-        document.getElementById('fechaFinShinsoban').value = data.shinsoban.finalizacion || '';
-        document.getElementById('numTomosShinsoban').value = data.shinsoban.num_tomos || '';
-        document.getElementById('numCapShinsoban').value = data.shinsoban.num_capitulos || '';
-      }
-
-      if (data.kanzenban) {
-        document.getElementById('selloKanzenban').value = data.kanzenban.sello || '';
-        document.getElementById('fechaLanzKanzenban').value = data.kanzenban.fecha_lanzamiento || '';
-        document.getElementById('fechaFinKanzenban').value = data.kanzenban.finalizacion || '';
-        document.getElementById('numTomosKanzenban').value = data.kanzenban.num_tomos || '';
-        document.getElementById('numCapKanzenban').value = data.kanzenban.num_capitulos || '';
-      }
-
-      if (data.bunkoban) {
-        document.getElementById('selloBunkoban').value = data.bunkoban.sello || '';
-        document.getElementById('fechaLanzBunkoban').value = data.bunkoban.fecha_lanzamiento || '';
-        document.getElementById('fechaFinBunkoban').value = data.bunkoban.finalizacion || '';
-        document.getElementById('numTomosBunkoban').value = data.bunkoban.num_tomos || '';
-        document.getElementById('numCapBunkoban').value = data.bunkoban.num_capitulos || '';
-      }
+      evaluarTipoFormulario();
 
       contenedorGeneros.innerHTML = '';
       contadorGeneros = 0;
@@ -524,6 +581,8 @@
     const nombreActual = nombreInput.value;
     document.getElementById('mainForm').reset();
     nombreInput.value = nombreActual;
+
+    evaluarTipoFormulario();
 
     archivoSeleccionado = null;
     document.getElementById('imgPreview').classList.add('hidden');
@@ -630,6 +689,7 @@
     if (parentContainer) {
       parentContainer.querySelector('.arrow-btn').classList.remove('open');
     }
+    evaluarTipoFormulario();
     sincronizarOpcionesGeneros();
   }
 
@@ -683,14 +743,18 @@
       return alert('No podés incluir géneros duplicados en distintas casillas.');
     }
 
-    // Actualizar catálogos dinámicamente con los valores ingresados
+    agregarOpcionesSinRepetir('tipo', [document.getElementById('tipoInput').value]);
     agregarOpcionesSinRepetir('pais', [document.getElementById('paisInput').value]);
     agregarOpcionesSinRepetir('generos', listaGeneros);
     agregarOpcionesSinRepetir('autor', [document.getElementById('autorInput').value]);
     agregarOpcionesSinRepetir('guion', [document.getElementById('guionInput').value]);
     agregarOpcionesSinRepetir('dibujo', [document.getElementById('dibujoInput').value]);
-    agregarOpcionesSinRepetir('editorial', [document.getElementById('editorialInput').value]);
+    agregarOpcionesSinRepetir('editorial', [
+      document.getElementById('editorialInput').value,
+      document.getElementById('editorialRevisionInput').value
+    ]);
     agregarOpcionesSinRepetir('revista', [document.getElementById('revistaInput').value]);
+    agregarOpcionesSinRepetir('plataforma', [document.getElementById('plataformaInput').value]);
     agregarOpcionesSinRepetir('sellos', [
       document.getElementById('selloTankobon').value,
       document.getElementById('selloShinsoban').value,
@@ -706,54 +770,72 @@
       portadaUrl = await subirPortadaASupabase(nombre, ext) || urlPortadaExistente;
     }
 
+    const tipoActual = document.getElementById('tipoInput').value.trim();
+
     const payload = {
       nombre: nombre,
       romaji: document.getElementById('romajiInput').value.trim(),
       ingles: document.getElementById('inglesInput').value.trim(),
       ess_lat: document.getElementById('essLatInput').value.trim(),
-      tipo: document.getElementById('tipoInput').value.trim() || 'Sin Tipo',
-      demografia: document.getElementById('demografiaInput').value.trim(),
+      tipo: tipoActual || 'Sin Tipo',
       pais: document.getElementById('paisInput').value.trim(),
       genero: listaGeneros,
       autor: document.getElementById('autorInput').value.trim(),
-      guion: document.getElementById('guionInput').value.trim(),
-      dibujo: document.getElementById('dibujoInput').value.trim(),
-      editorial: document.getElementById('editorialInput').value.trim(),
-      revista: document.getElementById('revistaInput').value.trim(),
-      revista_fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value.trim() || null,
-      revista_finalizacion: document.getElementById('fechaFinRevistaInput').value.trim() || null,
-      revista_num_capitulos: document.getElementById('numCapRevistaInput').value || null,
       link: document.getElementById('linkInput').value.trim(),
-      tankobon: {
+      portada_url: portadaUrl
+    };
+
+    if (tipoActual.toLowerCase() === 'web novel') {
+      payload.plataforma = document.getElementById('plataformaInput').value.trim();
+      payload.revista_fecha_lanzamiento = document.getElementById('fechaLanzRevistaInput').value.trim() || null;
+      payload.revista_finalizacion = document.getElementById('fechaFinRevistaInput').value.trim() || null;
+      payload.revista_num_capitulos = document.getElementById('numCapRevistaInput').value || null;
+      payload.wn_num_tomos = document.getElementById('numTomosWnInput').value || null;
+      payload.revision_impresa = {
+        editorial: document.getElementById('editorialRevisionInput').value.trim(),
+        fecha_lanzamiento: document.getElementById('fechaLanzRevisionInput').value.trim(),
+        finalizacion: document.getElementById('fechaFinRevisionInput').value.trim(),
+        num_capitulos: document.getElementById('numCapRevisionInput').value,
+        num_tomos: document.getElementById('numTomosRevisionInput').value
+      };
+    } else {
+      payload.demografia = document.getElementById('demografiaInput').value.trim();
+      payload.guion = document.getElementById('guionInput').value.trim();
+      payload.dibujo = document.getElementById('dibujoInput').value.trim();
+      payload.editorial = document.getElementById('editorialInput').value.trim();
+      payload.revista = document.getElementById('revistaInput').value.trim();
+      payload.revista_fecha_lanzamiento = document.getElementById('fechaLanzRevistaInput').value.trim() || null;
+      payload.revista_finalizacion = document.getElementById('fechaFinRevistaInput').value.trim() || null;
+      payload.revista_num_capitulos = document.getElementById('numCapRevistaInput').value || null;
+      payload.tankobon = {
         sello: document.getElementById('selloTankobon').value.trim(),
         fecha_lanzamiento: document.getElementById('fechaLanzTankobon').value.trim(),
         finalizacion: document.getElementById('fechaFinTankobon').value.trim(),
         num_tomos: document.getElementById('numTomosTankobon').value,
         num_capitulos: document.getElementById('numCapTankobon').value
-      },
-      shinsoban: {
+      };
+      payload.shinsoban = {
         sello: document.getElementById('selloShinsoban').value.trim(),
         fecha_lanzamiento: document.getElementById('fechaLanzShinsoban').value.trim(),
         finalizacion: document.getElementById('fechaFinShinsoban').value.trim(),
         num_tomos: document.getElementById('numTomosShinsoban').value,
         num_capitulos: document.getElementById('numCapShinsoban').value
-      },
-      kanzenban: {
+      };
+      payload.kanzenban = {
         sello: document.getElementById('selloKanzenban').value.trim(),
         fecha_lanzamiento: document.getElementById('fechaLanzKanzenban').value.trim(),
         finalizacion: document.getElementById('fechaFinKanzenban').value.trim(),
         num_tomos: document.getElementById('numTomosKanzenban').value,
         num_capitulos: document.getElementById('numCapKanzenban').value
-      },
-      bunkoban: {
+      };
+      payload.bunkoban = {
         sello: document.getElementById('selloBunkoban').value.trim(),
         fecha_lanzamiento: document.getElementById('fechaLanzBunkoban').value.trim(),
         finalizacion: document.getElementById('fechaFinBunkoban').value.trim(),
         num_tomos: document.getElementById('numTomosBunkoban').value,
         num_capitulos: document.getElementById('numCapBunkoban').value
-      },
-      portada_url: portadaUrl
-    };
+      };
+    }
 
     if (registroExistenteId) {
       payload.id = registroExistenteId;
@@ -823,6 +905,7 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     actualizarTodosLosMenus();
+    evaluarTipoFormulario();
     cargarObrasAgrupadas();
   });
 </script>
