@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.32</title>
+  <title>Formulario Extendido de Registro v0.33</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -362,7 +362,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.32
+      Versión: v0.33
     </footer>
   </div>
 
@@ -408,8 +408,10 @@
   }
 
   function obtenerTablaSegunTipo(tipo) {
-    const t = (tipo || '').trim().toLowerCase();
-    if (t === 'novela web' || t === 'web novel') {
+    if (!tipo) return 'mangas';
+    const t = tipo.toString().trim().toLowerCase();
+    
+    if (t === 'novela web' || t === 'web novel' || t === 'novela_web') {
       return 'novelas_web';
     }
     return 'mangas';
@@ -752,7 +754,8 @@
     const nombre = document.getElementById('nombreInput').value.trim();
     if (!nombre) return alert('El Nombre es obligatorio');
 
-    const tipoValor = document.getElementById('tipoInput').value.trim();
+    const tipoInputEl = document.getElementById('tipoInput');
+    const tipoValor = tipoInputEl ? tipoInputEl.value.trim() : '';
     const tablaDestino = obtenerTablaSegunTipo(tipoValor);
 
     const selectsGeneros = document.querySelectorAll(".genero-input-field");
