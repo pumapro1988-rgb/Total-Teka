@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.31</title>
+  <title>Formulario Extendido de Registro v0.32</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -362,7 +362,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.31
+      Versión: v0.32
     </footer>
   </div>
 
@@ -405,6 +405,14 @@
 
   function guardarCatalogos() {
     localStorage.setItem('catalogos_obras', JSON.stringify(catalogos));
+  }
+
+  function obtenerTablaSegunTipo(tipo) {
+    const t = (tipo || '').trim().toLowerCase();
+    if (t === 'novela web' || t === 'web novel') {
+      return 'novelas_web';
+    }
+    return 'mangas';
   }
 
   function agregarOpcionesSinRepetir(clave, listaNuevosValores) {
@@ -493,15 +501,25 @@
       return;
     }
 
-    const { data, error } = await _supabase
-      .from('mangas')
+    // Buscar en la tabla 'novelas_web'
+    let { data, error } = await _supabase
+      .from('novelas_web')
       .select('*')
       .ilike('nombre', nombreValor)
       .maybeSingle();
 
-    if (error) {
-      console.error('Error al consultar:', error.message);
-      return;
+    let esNovelaWeb = true;
+
+    // Si no la encuentra ahí, buscar en 'mangas'
+    if (!data) {
+      const resManga = await _supabase
+        .from('mangas')
+        .select('*')
+        .ilike('nombre', nombreValor)
+        .maybeSingle();
+
+      data = resManga.data;
+      esNovelaWeb = false;
     }
 
     if (data) {
@@ -512,36 +530,42 @@
       document.getElementById('romajiInput').value = data.romaji || '';
       document.getElementById('inglesInput').value = data.ingles || '';
       document.getElementById('essLatInput').value = data.ess_lat || '';
-      document.getElementById('tipoInput').value = data.tipo || '';
-      document.getElementById('demografiaInput').value = data.demografia || '';
+      document.getElementById('tipoInput').value = esNovelaWeb ? 'Novela web' : (data.tipo || 'Manga');
       document.getElementById('paisInput').value = data.pais || '';
       document.getElementById('autorInput').value = data.autor || '';
-      document.getElementById('guionInput').value = data.guion || '';
-      document.getElementById('dibujoInput').value = data.dibujo || '';
-      document.getElementById('editorialInput').value = data.editorial || '';
-      document.getElementById('revistaInput').value = data.revista || '';
-      document.getElementById('fechaLanzRevistaInput').value = data.revista_fecha_lanzamiento || '';
-      document.getElementById('fechaFinRevistaInput').value = data.revista_finalizacion || '';
-      document.getElementById('numCapRevistaInput').value = data.revista_num_capitulos || '';
       document.getElementById('linkInput').value = data.link || '';
 
-      document.getElementById('plataformaInput').value = data.plataforma || '';
-      document.getElementById('numTomosWnInput').value = data.wn_num_tomos || '';
+      if (esNovelaWeb) {
+        document.getElementById('plataformaInput').value = data.plataforma || '';
+        document.getElementById('numTomosWnInput').value = data.wn_num_tomos || '';
+        document.getElementById('fechaLanzRevistaInput').value = data.fecha_lanzamiento || '';
+        document.getElementById('fechaFinRevistaInput').value = data.finalizacion || '';
+        document.getElementById('numCapRevistaInput').value = data.num_capitulos || '';
 
-      if (data.revision_impresa) {
-        document.getElementById('editorialRevisionInput').value = data.revision_impresa.editorial || '';
-        document.getElementById('fechaLanzRevisionInput').value = data.revision_impresa.fecha_lanzamiento || '';
-        document.getElementById('fechaFinRevisionInput').value = data.revision_impresa.finalizacion || '';
-        document.getElementById('numCapRevisionInput').value = data.revision_impresa.num_capitulos || '';
-        document.getElementById('numTomosRevisionInput').value = data.revision_impresa.num_tomos || '';
-      }
+        if (data.revision_impresa) {
+          document.getElementById('editorialRevisionInput').value = data.revision_impresa.editorial || '';
+          document.getElementById('fechaLanzRevisionInput').value = data.revision_impresa.fecha_lanzamiento || '';
+          document.getElementById('fechaFinRevisionInput').value = data.revision_impresa.finalizacion || '';
+          document.getElementById('numCapRevisionInput').value = data.revision_impresa.num_capitulos || '';
+          document.getElementById('numTomosRevisionInput').value = data.revision_impresa.num_tomos || '';
+        }
+      } else {
+        document.getElementById('demografiaInput').value = data.demografia || '';
+        document.getElementById('guionInput').value = data.guion || '';
+        document.getElementById('dibujoInput').value = data.dibujo || '';
+        document.getElementById('editorialInput').value = data.editorial || '';
+        document.getElementById('revistaInput').value = data.revista || '';
+        document.getElementById('fechaLanzRevistaInput').value = data.revista_fecha_lanzamiento || '';
+        document.getElementById('fechaFinRevistaInput').value = data.revista_finalizacion || '';
+        document.getElementById('numCapRevistaInput').value = data.revista_num_capitulos || '';
 
-      if (data.tankobon) {
-        document.getElementById('selloTankobon').value = data.tankobon.sello || '';
-        document.getElementById('fechaLanzTankobon').value = data.tankobon.fecha_lanzamiento || '';
-        document.getElementById('fechaFinTankobon').value = data.tankobon.finalizacion || '';
-        document.getElementById('numTomosTankobon').value = data.tankobon.num_tomos || '';
-        document.getElementById('numCapTankobon').value = data.tankobon.num_capitulos || '';
+        if (data.tankobon) {
+          document.getElementById('selloTankobon').value = data.tankobon.sello || '';
+          document.getElementById('fechaLanzTankobon').value = data.tankobon.fecha_lanzamiento || '';
+          document.getElementById('fechaFinTankobon').value = data.tankobon.finalizacion || '';
+          document.getElementById('numTomosTankobon').value = data.tankobon.num_tomos || '';
+          document.getElementById('numCapTankobon').value = data.tankobon.num_capitulos || '';
+        }
       }
 
       evaluarTipoFormulario();
@@ -728,6 +752,9 @@
     const nombre = document.getElementById('nombreInput').value.trim();
     if (!nombre) return alert('El Nombre es obligatorio');
 
+    const tipoValor = document.getElementById('tipoInput').value.trim();
+    const tablaDestino = obtenerTablaSegunTipo(tipoValor);
+
     const selectsGeneros = document.querySelectorAll(".genero-input-field");
     const listaGeneros = Array.from(selectsGeneros)
       .map(input => input.value.trim())
@@ -740,7 +767,7 @@
       return alert('No podés incluir géneros duplicados en distintas casillas.');
     }
 
-    agregarOpcionesSinRepetir('tipo', [document.getElementById('tipoInput').value]);
+    agregarOpcionesSinRepetir('tipo', [tipoValor]);
     agregarOpcionesSinRepetir('pais', [document.getElementById('paisInput').value]);
     agregarOpcionesSinRepetir('generos', listaGeneros);
     agregarOpcionesSinRepetir('autor', [document.getElementById('autorInput').value]);
@@ -767,70 +794,80 @@
       portadaUrl = await subirPortadaASupabase(nombre, ext) || urlPortadaExistente;
     }
 
-    const tipoActual = document.getElementById('tipoInput').value.trim();
+    let payload = {};
 
-    const payload = {
-      nombre: nombre,
-      romaji: document.getElementById('romajiInput').value.trim(),
-      ingles: document.getElementById('inglesInput').value.trim(),
-      ess_lat: document.getElementById('essLatInput').value.trim(),
-      tipo: tipoActual || 'Sin Tipo',
-      pais: document.getElementById('paisInput').value.trim(),
-      genero: listaGeneros,
-      autor: document.getElementById('autorInput').value.trim(),
-      link: document.getElementById('linkInput').value.trim(),
-      portada_url: portadaUrl
-    };
-
-    if (tipoActual.toLowerCase() === 'novela web' || tipoActual.toLowerCase() === 'web novel') {
-      payload.plataforma = document.getElementById('plataformaInput').value.trim();
-      payload.revista_fecha_lanzamiento = document.getElementById('fechaLanzRevistaInput').value.trim() || null;
-      payload.revista_finalizacion = document.getElementById('fechaFinRevistaInput').value.trim() || null;
-      payload.revista_num_capitulos = document.getElementById('numCapRevistaInput').value || null;
-      payload.wn_num_tomos = document.getElementById('numTomosWnInput').value || null;
-      payload.revision_impresa = {
-        editorial: document.getElementById('editorialRevisionInput').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzRevisionInput').value.trim(),
-        finalizacion: document.getElementById('fechaFinRevisionInput').value.trim(),
-        num_capitulos: document.getElementById('numCapRevisionInput').value,
-        num_tomos: document.getElementById('numTomosRevisionInput').value
+    if (tablaDestino === 'novelas_web') {
+      payload = {
+        nombre: nombre,
+        romaji: document.getElementById('romajiInput').value.trim(),
+        ingles: document.getElementById('inglesInput').value.trim(),
+        ess_lat: document.getElementById('essLatInput').value.trim(),
+        pais: document.getElementById('paisInput').value.trim(),
+        genero: listaGeneros,
+        autor: document.getElementById('autorInput').value.trim(),
+        plataforma: document.getElementById('plataformaInput').value.trim(),
+        wn_num_tomos: document.getElementById('numTomosWnInput').value || null,
+        fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value.trim() || null,
+        finalizacion: document.getElementById('fechaFinRevistaInput').value.trim() || null,
+        num_capitulos: document.getElementById('numCapRevistaInput').value || null,
+        revision_impresa: {
+          editorial: document.getElementById('editorialRevisionInput').value.trim(),
+          fecha_lanzamiento: document.getElementById('fechaLanzRevisionInput').value.trim(),
+          finalizacion: document.getElementById('fechaFinRevisionInput').value.trim(),
+          num_capitulos: document.getElementById('numCapRevisionInput').value,
+          num_tomos: document.getElementById('numTomosRevisionInput').value
+        },
+        portada_url: portadaUrl,
+        link: document.getElementById('linkInput').value.trim()
       };
     } else {
-      payload.demografia = document.getElementById('demografiaInput').value.trim();
-      payload.guion = document.getElementById('guionInput').value.trim();
-      payload.dibujo = document.getElementById('dibujoInput').value.trim();
-      payload.editorial = document.getElementById('editorialInput').value.trim();
-      payload.revista = document.getElementById('revistaInput').value.trim();
-      payload.revista_fecha_lanzamiento = document.getElementById('fechaLanzRevistaInput').value.trim() || null;
-      payload.revista_finalizacion = document.getElementById('fechaFinRevistaInput').value.trim() || null;
-      payload.revista_num_capitulos = document.getElementById('numCapRevistaInput').value || null;
-      payload.tankobon = {
-        sello: document.getElementById('selloTankobon').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzTankobon').value.trim(),
-        finalizacion: document.getElementById('fechaFinTankobon').value.trim(),
-        num_tomos: document.getElementById('numTomosTankobon').value,
-        num_capitulos: document.getElementById('numCapTankobon').value
-      };
-      payload.shinsoban = {
-        sello: document.getElementById('selloShinsoban').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzShinsoban').value.trim(),
-        finalizacion: document.getElementById('fechaFinShinsoban').value.trim(),
-        num_tomos: document.getElementById('numTomosShinsoban').value,
-        num_capitulos: document.getElementById('numCapShinsoban').value
-      };
-      payload.kanzenban = {
-        sello: document.getElementById('selloKanzenban').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzKanzenban').value.trim(),
-        finalizacion: document.getElementById('fechaFinKanzenban').value.trim(),
-        num_tomos: document.getElementById('numTomosKanzenban').value,
-        num_capitulos: document.getElementById('numCapKanzenban').value
-      };
-      payload.bunkoban = {
-        sello: document.getElementById('selloBunkoban').value.trim(),
-        fecha_lanzamiento: document.getElementById('fechaLanzBunkoban').value.trim(),
-        finalizacion: document.getElementById('fechaFinBunkoban').value.trim(),
-        num_tomos: document.getElementById('numTomosBunkoban').value,
-        num_capitulos: document.getElementById('numCapBunkoban').value
+      payload = {
+        nombre: nombre,
+        romaji: document.getElementById('romajiInput').value.trim(),
+        ingles: document.getElementById('inglesInput').value.trim(),
+        ess_lat: document.getElementById('essLatInput').value.trim(),
+        tipo: tipoValor || 'Manga',
+        demografia: document.getElementById('demografiaInput').value.trim(),
+        pais: document.getElementById('paisInput').value.trim(),
+        genero: listaGeneros,
+        autor: document.getElementById('autorInput').value.trim(),
+        guion: document.getElementById('guionInput').value.trim(),
+        dibujo: document.getElementById('dibujoInput').value.trim(),
+        editorial: document.getElementById('editorialInput').value.trim(),
+        revista: document.getElementById('revistaInput').value.trim(),
+        revista_fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value.trim() || null,
+        revista_finalizacion: document.getElementById('fechaFinRevistaInput').value.trim() || null,
+        revista_num_capitulos: document.getElementById('numCapRevistaInput').value || null,
+        tankobon: {
+          sello: document.getElementById('selloTankobon').value.trim(),
+          fecha_lanzamiento: document.getElementById('fechaLanzTankobon').value.trim(),
+          finalizacion: document.getElementById('fechaFinTankobon').value.trim(),
+          num_tomos: document.getElementById('numTomosTankobon').value,
+          num_capitulos: document.getElementById('numCapTankobon').value
+        },
+        shinsoban: {
+          sello: document.getElementById('selloShinsoban').value.trim(),
+          fecha_lanzamiento: document.getElementById('fechaLanzShinsoban').value.trim(),
+          finalizacion: document.getElementById('fechaFinShinsoban').value.trim(),
+          num_tomos: document.getElementById('numTomosShinsoban').value,
+          num_capitulos: document.getElementById('numCapShinsoban').value
+        },
+        kanzenban: {
+          sello: document.getElementById('selloKanzenban').value.trim(),
+          fecha_lanzamiento: document.getElementById('fechaLanzKanzenban').value.trim(),
+          finalizacion: document.getElementById('fechaFinKanzenban').value.trim(),
+          num_tomos: document.getElementById('numTomosKanzenban').value,
+          num_capitulos: document.getElementById('numCapKanzenban').value
+        },
+        bunkoban: {
+          sello: document.getElementById('selloBunkoban').value.trim(),
+          fecha_lanzamiento: document.getElementById('fechaLanzBunkoban').value.trim(),
+          finalizacion: document.getElementById('fechaFinBunkoban').value.trim(),
+          num_tomos: document.getElementById('numTomosBunkoban').value,
+          num_capitulos: document.getElementById('numCapBunkoban').value
+        },
+        portada_url: portadaUrl,
+        link: document.getElementById('linkInput').value.trim()
       };
     }
 
@@ -839,13 +876,13 @@
     }
 
     const { data, error } = await _supabase
-      .from('mangas')
+      .from(tablaDestino)
       .upsert([payload], { onConflict: 'nombre' });
 
     if (error) {
-      alert('Error al guardar en Supabase: ' + error.message);
+      alert(`Error al guardar en ${tablaDestino}: ` + error.message);
     } else {
-      alert('¡Obra guardada/actualizada con éxito!');
+      alert(`¡Obra guardada/actualizada con éxito en ${tablaDestino}!`);
       limpiarCamposSecundarios();
       document.getElementById('nombreInput').value = '';
 
@@ -855,24 +892,38 @@
 
   async function cargarObrasAgrupadas() {
     const container = document.getElementById('listas-agrupadas-container');
-    const { data: obras, error } = await _supabase.from('mangas').select('*').order('created_at', { ascending: false });
+    
+    // Consultar ambas tablas en paralelo
+    const [resMangas, resNovelas] = await Promise.all([
+      _supabase.from('mangas').select('*').order('created_at', { ascending: false }),
+      _supabase.from('novelas_web').select('*').order('created_at', { ascending: false })
+    ]);
 
-    if (error) {
-      container.innerHTML = `<p style="color: #ff4d4d;">Error al cargar datos: ${error.message}</p>`;
+    if (resMangas.error || resNovelas.error) {
+      const err = resMangas.error || resNovelas.error;
+      container.innerHTML = `<p style="color: #ff4d4d;">Error al cargar datos: ${err.message}</p>`;
       return;
     }
 
-    if (!obras || obras.length === 0) {
+    const mangas = resMangas.data || [];
+    const novelasWeb = resNovelas.data || [];
+
+    if (mangas.length === 0 && novelasWeb.length === 0) {
       container.innerHTML = `<p style="color: #a1a1aa;">No hay obras registradas aún.</p>`;
       return;
     }
 
     const agrupadas = {};
-    obras.forEach(obra => {
-      const tipo = obra.tipo || 'Sin Especificar';
+
+    mangas.forEach(obra => {
+      const tipo = obra.tipo || 'Manga';
       if (!agrupadas[tipo]) agrupadas[tipo] = [];
       agrupadas[tipo].push(obra);
     });
+
+    if (novelasWeb.length > 0) {
+      agrupadas['Novela web'] = novelasWeb;
+    }
 
     let html = '';
     for (const [tipo, lista] of Object.entries(agrupadas)) {
@@ -909,4 +960,3 @@
 
 </body>
 </html>
-
