@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Total-Teka - Sailor Moon</title>
+  <title>Total-Teka - Sailor Moon (v0.03)</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -35,7 +35,7 @@
 
     <!-- Logo / Marca en el Centro -->
     <div class="text-[#05ACC1] font-black text-xl tracking-wider uppercase select-none">
-      Total-Teka
+      Total-Teka <span class="text-xs text-gray-500 font-normal">v0.03</span>
     </div>
 
     <!-- Botón de Búsqueda (Lupa) -->
@@ -46,9 +46,10 @@
     </button>
   </header>
 
-  <!-- Video Player Wrapper -->
+  <!-- Video Player Wrapper (Soporta Google Drive Iframe o Plyr) -->
   <div class="w-full relative bg-black overflow-hidden mb-4">
-    <div class="w-full max-w-4xl mx-auto aspect-video">
+    <div id="player-container" class="w-full max-w-4xl mx-auto aspect-video">
+      <!-- Por defecto carga el reproductor HTML5 / Plyr -->
       <video id="player" controls playsinline poster="https://img.dramasfree.com/cover/20221027/1666864465421_ed5b3247aa50e56c320c3f2e05fff20ajOM8Otxi6BObAV9WK1wzihcrskO.jpg"></video>
     </div>
   </div>
@@ -115,7 +116,6 @@
       <h2 class="mb-4 text-lg font-semibold text-white">Más títulos relacionados</h2>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         
-        <!-- Tarjeta 1 -->
         <div class="group cursor-pointer">
           <div class="relative aspect-[2/3] w-full overflow-hidden rounded-lg mb-2">
             <img src="https://img.dramasfree.com/cover/20221027/1666864461729_2ccfb827cdf039be9e65c33d01ddae5fjOM8Otxi6BObAV9WK1wzihcrskO.jpg" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200">
@@ -123,7 +123,6 @@
           <div class="text-xs font-medium text-gray-200 truncate">Sailor Moon R</div>
         </div>
 
-        <!-- Tarjeta 2 -->
         <div class="group cursor-pointer">
           <div class="relative aspect-[2/3] w-full overflow-hidden rounded-lg mb-2">
             <img src="https://img.dramasfree.com/cover/20221027/1666864461729_2ccfb827cdf039be9e65c33d01ddae5fjOM8Otxi6BObAV9WK1wzihcrskO.jpg" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200">
@@ -138,23 +137,35 @@
 
   <!-- Lógica JavaScript -->
   <script>
-    const currentEpisode = 1;
-    const sampleVideoUrl = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+    let currentEpisode = 1;
 
-    const video = document.getElementById('player');
+    // Diccionario/Lista con las URLs de los episodios (pueden ser HLS .m3u8 o IDs de Google Drive)
+    const episodeData = {
+      1: { type: 'drive', id: '1ABC123xyz_REEMPLAZA_CON_TU_ID_DE_DRIVE' }, // Ejemplo Google Drive
+      2: { type: 'hls', url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8' } // Ejemplo Streaming HLS
+    };
 
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(sampleVideoUrl);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, function() {
-        new Plyr(video, {
-          controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen']
+    function loadGoogleDrivePlayer(driveId) {
+      const container = document.getElementById('player-container');
+      container.innerHTML = `<iframe src="https://drive.google.com/file/d/${driveId}/preview" class="w-full h-full border-0" allow="autoplay" allowfullscreen></iframe>`;
+    }
+
+    function loadHLSPlayer(url) {
+      const container = document.getElementById('player-container');
+      container.innerHTML = `<video id="player" controls playsinline class="w-full h-full"></video>`;
+      const video = document.getElementById('player');
+
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          new Plyr(video);
         });
-      });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = sampleVideoUrl;
-      new Plyr(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        new Plyr(video);
+      }
     }
 
     function renderEpisodes(start, end) {
@@ -181,14 +192,27 @@
     }
 
     function playEpisode(epNumber) {
-      alert("Cargando episodio " + epNumber);
+      currentEpisode = epNumber;
+      const data = episodeData[epNumber];
+
+      if (data && data.type === 'drive') {
+        loadGoogleDrivePlayer(data.id);
+      } else if (data && data.type === 'hls') {
+        loadHLSPlayer(data.url);
+      } else {
+        // Carga por defecto si no hay un ID configurado
+        loadHLSPlayer("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
+      }
+
+      renderEpisodes(1, 10);
     }
 
     function changeSeason(seasonNumber) {
       alert("Cambiando a la Temporada " + seasonNumber);
     }
 
-    renderEpisodes(1, 10);
+    // Inicializar
+    playEpisode(1);
   </script>
 </body>
 </html>
