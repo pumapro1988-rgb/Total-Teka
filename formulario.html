@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.33</title>
+  <title>Formulario Extendido de Registro v0.34</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -31,9 +31,41 @@
       padding: 10px 12px; background: #09090b; border: 1px solid #27272a; border-radius: 8px; color: #f4f4f5; font-size: 15px; outline: none;
     }
     input[type="text"]:focus, input[type="number"]:focus { border-color: #3ecf8e; }
+    input:disabled { background: #18181b !important; color: #52525b !important; border-color: #27272a !important; cursor: not-allowed; }
 
     .row-inputs { display: flex; gap: 10px; }
     .row-inputs > div { flex: 1; }
+
+    /* Grupo de input con botón de anulación cuadrangular */
+    .input-toggle-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .input-toggle-group .custom-combobox { flex: 1; }
+    
+    .btn-toggle-field {
+      width: 40px;
+      height: 40px; /* Misma altura que los inputs */
+      flex-shrink: 0;
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 8px;
+      color: #f4f4f5;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-toggle-field:hover { background: #3f3f46; }
+    .btn-toggle-field.desactivado {
+      background: #09090b;
+      color: #3ecf8e;
+      border-color: #3ecf8e;
+    }
 
     .edicion-block { background: #121214; border: 1px solid #27272a; border-radius: 10px; padding: 14px; margin-top: 16px; }
     .edicion-block-title { font-size: 1rem; font-weight: bold; color: #3ecf8e; margin-bottom: 10px; border-bottom: 1px solid #27272a; padding-bottom: 6px; }
@@ -86,13 +118,22 @@
       <input type="text" id="nombreInput" placeholder="" required autocomplete="off">
 
       <label for="romajiInput">Romaji</label>
-      <input type="text" id="romajiInput" placeholder="">
+      <div class="input-toggle-group">
+        <input type="text" id="romajiInput" placeholder="">
+        <button type="button" class="btn-toggle-field" onclick="toggleEstadoCampo('romajiInput', this)">✕</button>
+      </div>
 
       <label for="inglesInput">Inglés</label>
-      <input type="text" id="inglesInput" placeholder="">
+      <div class="input-toggle-group">
+        <input type="text" id="inglesInput" placeholder="">
+        <button type="button" class="btn-toggle-field" onclick="toggleEstadoCampo('inglesInput', this)">✕</button>
+      </div>
 
       <label for="essLatInput">Esp/Lat</label>
-      <input type="text" id="essLatInput" placeholder="">
+      <div class="input-toggle-group">
+        <input type="text" id="essLatInput" placeholder="">
+        <button type="button" class="btn-toggle-field" onclick="toggleEstadoCampo('essLatInput', this)">✕</button>
+      </div>
 
       <div class="row-inputs">
         <div>
@@ -134,31 +175,40 @@
       </div>
 
       <label for="autorInput">Autor</label>
-      <div class="custom-combobox">
-        <input type="text" id="autorInput" class="combobox-input" placeholder="" autocomplete="off">
-        <button type="button" class="arrow-btn" onclick="toggleMenu('menuAutor', this, event)">
-          <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-        </button>
-        <div class="dropdown-menu" id="menuAutor"></div>
+      <div class="input-toggle-group">
+        <div class="custom-combobox">
+          <input type="text" id="autorInput" class="combobox-input" placeholder="" autocomplete="off">
+          <button type="button" class="arrow-btn" onclick="toggleMenu('menuAutor', this, event)">
+            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+          </button>
+          <div class="dropdown-menu" id="menuAutor"></div>
+        </div>
+        <button type="button" class="btn-toggle-field" onclick="toggleEstadoCampo('autorInput', this)">✕</button>
       </div>
 
       <div class="campo-estandar">
         <label for="guionInput">Guión</label>
-        <div class="custom-combobox">
-          <input type="text" id="guionInput" class="combobox-input" placeholder="" autocomplete="off">
-          <button type="button" class="arrow-btn" onclick="toggleMenu('menuGuion', this, event)">
-            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-          </button>
-          <div class="dropdown-menu" id="menuGuion"></div>
+        <div class="input-toggle-group">
+          <div class="custom-combobox">
+            <input type="text" id="guionInput" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuGuion', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuGuion"></div>
+          </div>
+          <button type="button" class="btn-toggle-field" onclick="toggleEstadoCampo('guionInput', this)">✕</button>
         </div>
 
         <label for="dibujoInput">Dibujo</label>
-        <div class="custom-combobox">
-          <input type="text" id="dibujoInput" class="combobox-input" placeholder="" autocomplete="off">
-          <button type="button" class="arrow-btn" onclick="toggleMenu('menuDibujo', this, event)">
-            <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
-          </button>
-          <div class="dropdown-menu" id="menuDibujo"></div>
+        <div class="input-toggle-group">
+          <div class="custom-combobox">
+            <input type="text" id="dibujoInput" class="combobox-input" placeholder="" autocomplete="off">
+            <button type="button" class="arrow-btn" onclick="toggleMenu('menuDibujo', this, event)">
+              <svg viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="menuDibujo"></div>
+          </div>
+          <button type="button" class="btn-toggle-field" onclick="toggleEstadoCampo('dibujoInput', this)">✕</button>
         </div>
 
         <label for="editorialInput">Editorial</label>
@@ -362,7 +412,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.33
+      Versión: v0.34
     </footer>
   </div>
 
@@ -405,6 +455,21 @@
 
   function guardarCatalogos() {
     localStorage.setItem('catalogos_obras', JSON.stringify(catalogos));
+  }
+
+  function toggleEstadoCampo(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    if (input.disabled) {
+      input.disabled = false;
+      btn.textContent = '✕';
+      btn.classList.remove('desactivado');
+    } else {
+      input.disabled = true;
+      btn.textContent = '◯';
+      btn.classList.add('desactivado');
+    }
   }
 
   function obtenerTablaSegunTipo(tipo) {
@@ -503,7 +568,6 @@
       return;
     }
 
-    // Buscar en la tabla 'novelas_web'
     let { data, error } = await _supabase
       .from('novelas_web')
       .select('*')
@@ -512,7 +576,6 @@
 
     let esNovelaWeb = true;
 
-    // Si no la encuentra ahí, buscar en 'mangas'
     if (!data) {
       const resManga = await _supabase
         .from('mangas')
@@ -604,6 +667,19 @@
     const nombreActual = nombreInput.value;
     document.getElementById('mainForm').reset();
     nombreInput.value = nombreActual;
+
+    // Reactivar cualquier input que se haya desactivado manualmente
+    ['romajiInput', 'inglesInput', 'essLatInput', 'autorInput', 'guionInput', 'dibujoInput'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.disabled = false;
+        const btn = el.closest('.input-toggle-group')?.querySelector('.btn-toggle-field');
+        if (btn) {
+          btn.textContent = '✕';
+          btn.classList.remove('desactivado');
+        }
+      }
+    });
 
     evaluarTipoFormulario();
 
@@ -750,6 +826,11 @@
     return publicUrlData.publicUrl;
   }
 
+  function obtenerValorCampo(id) {
+    const el = document.getElementById(id);
+    return (el && !el.disabled) ? el.value.trim() : '';
+  }
+
   async function guardarRegistro() {
     const nombre = document.getElementById('nombreInput').value.trim();
     if (!nombre) return alert('El Nombre es obligatorio');
@@ -773,9 +854,9 @@
     agregarOpcionesSinRepetir('tipo', [tipoValor]);
     agregarOpcionesSinRepetir('pais', [document.getElementById('paisInput').value]);
     agregarOpcionesSinRepetir('generos', listaGeneros);
-    agregarOpcionesSinRepetir('autor', [document.getElementById('autorInput').value]);
-    agregarOpcionesSinRepetir('guion', [document.getElementById('guionInput').value]);
-    agregarOpcionesSinRepetir('dibujo', [document.getElementById('dibujoInput').value]);
+    agregarOpcionesSinRepetir('autor', [obtenerValorCampo('autorInput')]);
+    agregarOpcionesSinRepetir('guion', [obtenerValorCampo('guionInput')]);
+    agregarOpcionesSinRepetir('dibujo', [obtenerValorCampo('dibujoInput')]);
     agregarOpcionesSinRepetir('editorial', [
       document.getElementById('editorialInput').value,
       document.getElementById('editorialRevisionInput').value
@@ -802,12 +883,12 @@
     if (tablaDestino === 'novelas_web') {
       payload = {
         nombre: nombre,
-        romaji: document.getElementById('romajiInput').value.trim(),
-        ingles: document.getElementById('inglesInput').value.trim(),
-        ess_lat: document.getElementById('essLatInput').value.trim(),
+        romaji: obtenerValorCampo('romajiInput'),
+        ingles: obtenerValorCampo('inglesInput'),
+        ess_lat: obtenerValorCampo('essLatInput'),
         pais: document.getElementById('paisInput').value.trim(),
         genero: listaGeneros,
-        autor: document.getElementById('autorInput').value.trim(),
+        autor: obtenerValorCampo('autorInput'),
         plataforma: document.getElementById('plataformaInput').value.trim(),
         wn_num_tomos: document.getElementById('numTomosWnInput').value || null,
         fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value.trim() || null,
@@ -826,16 +907,16 @@
     } else {
       payload = {
         nombre: nombre,
-        romaji: document.getElementById('romajiInput').value.trim(),
-        ingles: document.getElementById('inglesInput').value.trim(),
-        ess_lat: document.getElementById('essLatInput').value.trim(),
+        romaji: obtenerValorCampo('romajiInput'),
+        ingles: obtenerValorCampo('inglesInput'),
+        ess_lat: obtenerValorCampo('essLatInput'),
         tipo: tipoValor || 'Manga',
         demografia: document.getElementById('demografiaInput').value.trim(),
         pais: document.getElementById('paisInput').value.trim(),
         genero: listaGeneros,
-        autor: document.getElementById('autorInput').value.trim(),
-        guion: document.getElementById('guionInput').value.trim(),
-        dibujo: document.getElementById('dibujoInput').value.trim(),
+        autor: obtenerValorCampo('autorInput'),
+        guion: obtenerValorCampo('guionInput'),
+        dibujo: obtenerValorCampo('dibujoInput'),
         editorial: document.getElementById('editorialInput').value.trim(),
         revista: document.getElementById('revistaInput').value.trim(),
         revista_fecha_lanzamiento: document.getElementById('fechaLanzRevistaInput').value.trim() || null,
@@ -896,7 +977,6 @@
   async function cargarObrasAgrupadas() {
     const container = document.getElementById('listas-agrupadas-container');
     
-    // Consultar ambas tablas en paralelo
     const [resMangas, resNovelas] = await Promise.all([
       _supabase.from('mangas').select('*').order('created_at', { ascending: false }),
       _supabase.from('novelas_web').select('*').order('created_at', { ascending: false })
