@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.35</title>
+  <title>Formulario Extendido de Registro v0.36</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -428,7 +428,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.35
+      Versión: v0.36
     </footer>
   </div>
 
@@ -637,7 +637,6 @@
     document.getElementById('modoFormulario').textContent = '(Editando existente)';
     document.getElementById('nombreInput').value = data.nombre || '';
 
-    // Asignar valores y actualizar estado del botón anular (✕ / ◯)
     document.getElementById('romajiInput').value = data.romaji || '';
     fijarEstadoCampo('romajiInput', data.romaji === '' || data.romaji === null);
 
@@ -716,7 +715,6 @@
       document.getElementById('previewStatus').textContent = 'Sin imagen seleccionada';
     }
 
-    // Llevar la vista de la página hacia el formulario suavemente
     document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
   }
 
@@ -729,7 +727,6 @@
     document.getElementById('mainForm').reset();
     nombreInput.value = nombreActual;
 
-    // Reactivar todos los campos opcionales por defecto
     ['romajiInput', 'inglesInput', 'essLatInput', 'autorInput', 'guionInput', 'dibujoInput'].forEach(id => {
       fijarEstadoCampo(id, false);
     });
@@ -904,7 +901,9 @@
       return alert('No podés incluir géneros duplicados en distintas casillas.');
     }
 
+    // Guardar automáticamente todos los nuevos términos ingresados manualmente en catalogos/localStorage
     agregarOpcionesSinRepetir('tipo', [tipoValor]);
+    agregarOpcionesSinRepetir('demografia', [document.getElementById('demografiaInput').value]);
     agregarOpcionesSinRepetir('pais', [document.getElementById('paisInput').value]);
     agregarOpcionesSinRepetir('generos', listaGeneros);
     agregarOpcionesSinRepetir('autor', [obtenerValorCampo('autorInput')]);
