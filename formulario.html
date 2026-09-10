@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Extendido de Registro v0.34</title>
+  <title>Formulario Extendido de Registro v0.35</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: system-ui, sans-serif; }
@@ -46,7 +46,7 @@
     
     .btn-toggle-field {
       width: 40px;
-      height: 40px; /* Misma altura que los inputs */
+      height: 40px;
       flex-shrink: 0;
       background: #27272a;
       border: 1px solid #3f3f46;
@@ -99,7 +99,23 @@
     .btn-submit { width: 100%; margin-top: 20px; padding: 14px; background: #3ecf8e; border: none; border-radius: 8px; font-weight: bold; color: #000; font-size: 16px; cursor: pointer; }
     .version-footer { margin-top: 16px; padding-top: 8px; border-top: 1px solid #27272a; text-align: right; font-size: 0.75rem; color: #71717a; }
 
-    .obra-item { background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+    /* Estilos para los items clicables */
+    .obra-item { 
+      background: #18181b; 
+      border: 1px solid #27272a; 
+      border-radius: 8px; 
+      padding: 10px 14px; 
+      margin-bottom: 8px; 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .obra-item:hover {
+      background: #27272a;
+      border-color: #3ecf8e;
+    }
     .obra-item img { width: 32px; height: 44px; object-fit: cover; border-radius: 4px; border: 1px solid #27272a; }
     .obra-info { display: flex; flex-direction: column; }
     .obra-title { font-weight: bold; font-size: 0.95rem; color: #f4f4f5; }
@@ -412,7 +428,7 @@
     </form>
 
     <footer class="version-footer">
-      Versión: v0.34
+      Versión: v0.35
     </footer>
   </div>
 
@@ -469,6 +485,26 @@
       input.disabled = true;
       btn.textContent = '◯';
       btn.classList.add('desactivado');
+    }
+  }
+
+  function fijarEstadoCampo(inputId, estaDesactivado) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const btn = input.closest('.input-toggle-group')?.querySelector('.btn-toggle-field');
+
+    if (estaDesactivado) {
+      input.disabled = true;
+      if (btn) {
+        btn.textContent = '◯';
+        btn.classList.add('desactivado');
+      }
+    } else {
+      input.disabled = false;
+      if (btn) {
+        btn.textContent = '✕';
+        btn.classList.remove('desactivado');
+      }
     }
   }
 
@@ -588,75 +624,100 @@
     }
 
     if (data) {
-      registroExistenteId = data.id || null;
-      urlPortadaExistente = data.portada_url || '';
-
-      document.getElementById('modoFormulario').textContent = '(Editando existente)';
-      document.getElementById('romajiInput').value = data.romaji || '';
-      document.getElementById('inglesInput').value = data.ingles || '';
-      document.getElementById('essLatInput').value = data.ess_lat || '';
-      document.getElementById('tipoInput').value = esNovelaWeb ? 'Novela web' : (data.tipo || 'Manga');
-      document.getElementById('paisInput').value = data.pais || '';
-      document.getElementById('autorInput').value = data.autor || '';
-      document.getElementById('linkInput').value = data.link || '';
-
-      if (esNovelaWeb) {
-        document.getElementById('plataformaInput').value = data.plataforma || '';
-        document.getElementById('numTomosWnInput').value = data.wn_num_tomos || '';
-        document.getElementById('fechaLanzRevistaInput').value = data.fecha_lanzamiento || '';
-        document.getElementById('fechaFinRevistaInput').value = data.finalizacion || '';
-        document.getElementById('numCapRevistaInput').value = data.num_capitulos || '';
-
-        if (data.revision_impresa) {
-          document.getElementById('editorialRevisionInput').value = data.revision_impresa.editorial || '';
-          document.getElementById('fechaLanzRevisionInput').value = data.revision_impresa.fecha_lanzamiento || '';
-          document.getElementById('fechaFinRevisionInput').value = data.revision_impresa.finalizacion || '';
-          document.getElementById('numCapRevisionInput').value = data.revision_impresa.num_capitulos || '';
-          document.getElementById('numTomosRevisionInput').value = data.revision_impresa.num_tomos || '';
-        }
-      } else {
-        document.getElementById('demografiaInput').value = data.demografia || '';
-        document.getElementById('guionInput').value = data.guion || '';
-        document.getElementById('dibujoInput').value = data.dibujo || '';
-        document.getElementById('editorialInput').value = data.editorial || '';
-        document.getElementById('revistaInput').value = data.revista || '';
-        document.getElementById('fechaLanzRevistaInput').value = data.revista_fecha_lanzamiento || '';
-        document.getElementById('fechaFinRevistaInput').value = data.revista_finalizacion || '';
-        document.getElementById('numCapRevistaInput').value = data.revista_num_capitulos || '';
-
-        if (data.tankobon) {
-          document.getElementById('selloTankobon').value = data.tankobon.sello || '';
-          document.getElementById('fechaLanzTankobon').value = data.tankobon.fecha_lanzamiento || '';
-          document.getElementById('fechaFinTankobon').value = data.tankobon.finalizacion || '';
-          document.getElementById('numTomosTankobon').value = data.tankobon.num_tomos || '';
-          document.getElementById('numCapTankobon').value = data.tankobon.num_capitulos || '';
-        }
-      }
-
-      evaluarTipoFormulario();
-
-      contenedorGeneros.innerHTML = '';
-      contadorGeneros = 0;
-      if (Array.isArray(data.genero) && data.genero.length > 0) {
-        data.genero.forEach((gen, index) => {
-          crearCasillaGenero(index < 4);
-          const input = document.getElementById(`generoInput_${contadorGeneros}`);
-          if (input) input.value = gen;
-        });
-      } else {
-        for (let i = 0; i < 4; i++) { crearCasillaGenero(true); }
-      }
-
-      if (data.portada_url) {
-        const previewImg = document.getElementById('imgPreview');
-        previewImg.src = data.portada_url;
-        previewImg.classList.remove('hidden');
-        document.getElementById('previewStatus').textContent = 'Portada cargada de Supabase';
-      }
-
+      cargarObraEnFormulario(data, esNovelaWeb);
     } else {
       limpiarCamposSecundarios();
     }
+  }
+
+  function cargarObraEnFormulario(data, esNovelaWeb) {
+    registroExistenteId = data.id || null;
+    urlPortadaExistente = data.portada_url || '';
+
+    document.getElementById('modoFormulario').textContent = '(Editando existente)';
+    document.getElementById('nombreInput').value = data.nombre || '';
+
+    // Asignar valores y actualizar estado del botón anular (✕ / ◯)
+    document.getElementById('romajiInput').value = data.romaji || '';
+    fijarEstadoCampo('romajiInput', data.romaji === '' || data.romaji === null);
+
+    document.getElementById('inglesInput').value = data.ingles || '';
+    fijarEstadoCampo('inglesInput', data.ingles === '' || data.ingles === null);
+
+    document.getElementById('essLatInput').value = data.ess_lat || '';
+    fijarEstadoCampo('essLatInput', data.ess_lat === '' || data.ess_lat === null);
+
+    document.getElementById('autorInput').value = data.autor || '';
+    fijarEstadoCampo('autorInput', data.autor === '' || data.autor === null);
+
+    document.getElementById('tipoInput').value = esNovelaWeb ? 'Novela web' : (data.tipo || 'Manga');
+    document.getElementById('paisInput').value = data.pais || '';
+    document.getElementById('linkInput').value = data.link || '';
+
+    if (esNovelaWeb) {
+      document.getElementById('plataformaInput').value = data.plataforma || '';
+      document.getElementById('numTomosWnInput').value = data.wn_num_tomos || '';
+      document.getElementById('fechaLanzRevistaInput').value = data.fecha_lanzamiento || '';
+      document.getElementById('fechaFinRevistaInput').value = data.finalizacion || '';
+      document.getElementById('numCapRevistaInput').value = data.num_capitulos || '';
+
+      if (data.revision_impresa) {
+        document.getElementById('editorialRevisionInput').value = data.revision_impresa.editorial || '';
+        document.getElementById('fechaLanzRevisionInput').value = data.revision_impresa.fecha_lanzamiento || '';
+        document.getElementById('fechaFinRevisionInput').value = data.revision_impresa.finalizacion || '';
+        document.getElementById('numCapRevisionInput').value = data.revision_impresa.num_capitulos || '';
+        document.getElementById('numTomosRevisionInput').value = data.revision_impresa.num_tomos || '';
+      }
+    } else {
+      document.getElementById('demografiaInput').value = data.demografia || '';
+
+      document.getElementById('guionInput').value = data.guion || '';
+      fijarEstadoCampo('guionInput', data.guion === '' || data.guion === null);
+
+      document.getElementById('dibujoInput').value = data.dibujo || '';
+      fijarEstadoCampo('dibujoInput', data.dibujo === '' || data.dibujo === null);
+
+      document.getElementById('editorialInput').value = data.editorial || '';
+      document.getElementById('revistaInput').value = data.revista || '';
+      document.getElementById('fechaLanzRevistaInput').value = data.revista_fecha_lanzamiento || '';
+      document.getElementById('fechaFinRevistaInput').value = data.revista_finalizacion || '';
+      document.getElementById('numCapRevistaInput').value = data.revista_num_capitulos || '';
+
+      if (data.tankobon) {
+        document.getElementById('selloTankobon').value = data.tankobon.sello || '';
+        document.getElementById('fechaLanzTankobon').value = data.tankobon.fecha_lanzamiento || '';
+        document.getElementById('fechaFinTankobon').value = data.tankobon.finalizacion || '';
+        document.getElementById('numTomosTankobon').value = data.tankobon.num_tomos || '';
+        document.getElementById('numCapTankobon').value = data.tankobon.num_capitulos || '';
+      }
+    }
+
+    evaluarTipoFormulario();
+
+    contenedorGeneros.innerHTML = '';
+    contadorGeneros = 0;
+    if (Array.isArray(data.genero) && data.genero.length > 0) {
+      data.genero.forEach((gen, index) => {
+        crearCasillaGenero(index < 4);
+        const input = document.getElementById(`generoInput_${contadorGeneros}`);
+        if (input) input.value = gen;
+      });
+    } else {
+      for (let i = 0; i < 4; i++) { crearCasillaGenero(true); }
+    }
+
+    const previewImg = document.getElementById('imgPreview');
+    if (data.portada_url) {
+      previewImg.src = data.portada_url;
+      previewImg.classList.remove('hidden');
+      document.getElementById('previewStatus').textContent = 'Portada cargada de Supabase';
+    } else {
+      previewImg.classList.add('hidden');
+      document.getElementById('previewStatus').textContent = 'Sin imagen seleccionada';
+    }
+
+    // Llevar la vista de la página hacia el formulario suavemente
+    document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
   }
 
   function limpiarCamposSecundarios() {
@@ -668,17 +729,9 @@
     document.getElementById('mainForm').reset();
     nombreInput.value = nombreActual;
 
-    // Reactivar cualquier input que se haya desactivado manualmente
+    // Reactivar todos los campos opcionales por defecto
     ['romajiInput', 'inglesInput', 'essLatInput', 'autorInput', 'guionInput', 'dibujoInput'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.disabled = false;
-        const btn = el.closest('.input-toggle-group')?.querySelector('.btn-toggle-field');
-        if (btn) {
-          btn.textContent = '✕';
-          btn.classList.remove('desactivado');
-        }
-      }
+      fijarEstadoCampo(id, false);
     });
 
     evaluarTipoFormulario();
@@ -996,22 +1049,31 @@
       return;
     }
 
+    container.innerHTML = '';
+
     const agrupadas = {};
 
     mangas.forEach(obra => {
       const tipo = obra.tipo || 'Manga';
       if (!agrupadas[tipo]) agrupadas[tipo] = [];
-      agrupadas[tipo].push(obra);
+      agrupadas[tipo].push({ data: obra, esNovelaWeb: false });
     });
 
     if (novelasWeb.length > 0) {
-      agrupadas['Novela web'] = novelasWeb;
+      agrupadas['Novela web'] = novelasWeb.map(obra => ({ data: obra, esNovelaWeb: true }));
     }
 
-    let html = '';
     for (const [tipo, lista] of Object.entries(agrupadas)) {
-      html += `<h3>${tipo} (${lista.length})</h3>`;
-      lista.forEach(obra => {
+      const h3 = document.createElement('h3');
+      h3.textContent = `${tipo} (${lista.length})`;
+      container.appendChild(h3);
+
+      lista.forEach(item => {
+        const obra = item.data;
+        const divObra = document.createElement('div');
+        divObra.className = 'obra-item';
+        divObra.onclick = () => cargarObraEnFormulario(obra, item.esNovelaWeb);
+
         const imagenHtml = obra.portada_url 
           ? `<img src="${obra.portada_url}" alt="${obra.nombre}">`
           : `<div style="width: 32px; height: 44px; background: #09090b; border: 1px solid #27272a; border-radius: 4px;"></div>`;
@@ -1019,19 +1081,17 @@
         const autorTexto = obra.autor ? ` • Autor: ${obra.autor}` : '';
         const generoTexto = (obra.genero && obra.genero.length > 0) ? ` • Géneros: ${obra.genero.join(', ')}` : '';
 
-        html += `
-          <div class="obra-item">
-            ${imagenHtml}
-            <div class="obra-info">
-              <span class="obra-title">${obra.nombre}</span>
-              <span class="obra-sub">${obra.pais || 'País N/A'}${autorTexto}${generoTexto}</span>
-            </div>
+        divObra.innerHTML = `
+          ${imagenHtml}
+          <div class="obra-info">
+            <span class="obra-title">${obra.nombre}</span>
+            <span class="obra-sub">${obra.pais || 'País N/A'}${autorTexto}${generoTexto}</span>
           </div>
         `;
+
+        container.appendChild(divObra);
       });
     }
-
-    container.innerHTML = html;
   }
 
   window.addEventListener('DOMContentLoaded', () => {
